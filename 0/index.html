@@ -6,34 +6,52 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            text-align: center; 
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center; 
+            gap: 20px;
+            flex-wrap: wrap; 
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        figure {
+            margin: 0;
+        }
+        figcaption {
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <h1>Project 0: Becoming Friends with Your Camera</h1>
     <h2>Webpage Link: <a href="https://swetha2022.github.io/cs180/0/index.html">https://swetha2022.github.io/cs180/0/index.html</a></h2>
+
     <h2>Part 1: Selfie: The Wrong Way vs. The Right Way</h2>
-    <div style="display: flex; gap: 10px;">
-        <figure style="width: 25%; margin: 0;">
+    <div class="flex-center">
+        <figure style="width: 25%;">
             <img src="./IMG_9579.jpg" alt="Error" style="width: 100%;">
-            <figcaption style="text-align: center;">Close Up</figcaption>
+            <figcaption>Close Up</figcaption>
         </figure>
-        <figure style="width: 25%; margin: 0;">
+        <figure style="width: 25%;">
             <img src="./IMG_9580.jpg" alt="Error" style="width: 100%;">
-            <figcaption style="text-align: center;">Step Back + Zoom</figcaption>
+            <figcaption>Step Back + Zoom</figcaption>
         </figure>
     </div>
+
     <h2>Part 2: Architectural Perspective Compression</h2>
-    <div style="display: flex; gap: 10px;">
-        <figure style="width: 25%; margin: 0;">
+    <div class="flex-center">
+        <figure style="width: 25%;">
             <img src="./IMG_9612.jpg" alt="Error" style="width: 100%;">
-            <figcaption style="text-align: center;">Zoom</figcaption>
+            <figcaption>Zoom</figcaption>
         </figure>
-        <figure style="width: 25%; margin: 0;">
+        <figure style="width: 25%;">
             <img src="./IMG_9614.jpg" alt="Error" style="width: 100%;">
-            <figcaption style="text-align: center;">Close Up</figcaption>
+            <figcaption>Close Up</figcaption>
         </figure>
     </div>
+
     <h2>Part 3: The Dolly Zoom</h2>
     <figure style="width:500px;max-width:100%;margin:0 auto;">
         <div style="height:0;padding-bottom:75%;position:relative;">
@@ -45,8 +63,8 @@
             src="https://imgflip.com/embed/a4q4sv">
           </iframe>
         </div>
-        <figcaption style="text-align:center; font-style:italic; margin-top:8px;">
-        Scene with stuffed animals 
+        <figcaption style="margin-top:8px;">
+          Scene with stuffed animals
         </figcaption>
     </figure> 
 </body>
