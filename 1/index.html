@@ -31,9 +31,11 @@
     <h1>Project 1: Images of the Russian Empire -- Colorizing the Prokudin-Gorskii Photo Collection</h1>
     <h3>Webpage Link: <a href="https://swetha2022.github.io/cs180/1/index.html">https://swetha2022.github.io/cs180/1/index.html</a></h3>
 
+    <br>
     <h2>Introduction</h2>
     <p>In this project, I applied various image processing techniques to align digitized Prokudin-Gorskii glass plate images into a single RGB color image. I first implemented a naive algorithm that exhaustively searched within a predefined displacement window, selecting the offsets that produced the best score based on Euclidean distance and Normalized Cross-Correlation (NCC) when aligning the R and G plates to the B plate. While effective, this method was slow for larger image files and often produced blurry alignments on these images. To address this, I implemented an image pyramid that represented the image at multiple resolutions and applied the same search procedure recursively, moving from the coarsest to the finest scale with smaller displacement windows. This approach produced better alignments for large images and reduced processing time for each image to under one minute.</p>
 
+    <br>
     <h2>Part 1: Simple Alignment</h2>
     <p>In this part, I implemented a naive algorithm to align the R and G plates with the B plate using both Euclidean distance and Normalized Cross-Correlation (NCC). The algorithm worked as follows: I performed an exhaustive search over a displacement window ranging from -15 to 15 in both the x and y directions, shifting the R and G plates relative to the B plate using <code>np.roll()</code>. For each displacement, I computed a score based on either Euclidean distance or NCC between the shifted plate and the B plate. To prevent the borders from introducing noise into the results, I cropped 10% from each side of the plates and only used the cropped regions when computing the scores. The displacement that produced the best score was selected as the optimal alignment—first between the G and B plates, and then between the R and B plates. Overall, NCC yielded more accurate alignments than Euclidean distance, especially for images with significant variations in brightness and contrast.</p>
 
@@ -51,8 +53,8 @@
         <figure style="width: 25%;">
             <img src="./outputs_simple/ncc/monastery.jpg" alt="Error" style="width: 100%;">
             <figcaption>
-                <p>Green X-Y Displacement: (-3, 2)<br>
-                <p>Red X-Y Displacement: (3, 2)<br>
+                Green X-Y Displacement: (-3, 2)<br>
+                Red X-Y Displacement: (3, 2)<br>
                 Time Taken: 0.91 seconds
             </figcaption>
         </figure>
@@ -95,6 +97,7 @@
         </figure>
     </div>
 
+    <br>
     <h2>Part 2: Pyramid Alignment</h2>
     <p>To speed up the runtime and improve alignment on larger image files, I implemented an image pyramid with multiple resolutions of the image, where each level was downsampled by a factor of 2. The pyramid included the original image as well as progressively downsampled versions for up to 5 levels. I then reduced the search window to a displacement range of -7 to 7 pixels in both the x and y directions. Using a recursive approach, I began alignment at the coarsest resolution with this smaller window. As the recursion moved to finer resolutions, I applied the same displacement window, but centered around the optimal displacement returned from the previous (coarser) level scaled appropriately to the new resolution. Similar to the naive approach, I evaluated alignments of the R and G plates with the B plate using both Euclidean distance and NCC, with the 10% crop added to each side of the plates before computing the scores.</p>
     
@@ -227,6 +230,7 @@
         </figure>
     </div>
 
+    <br>
     <h2>Part 3: Pyramid Alignment on Extra Images</h2>
     <p>Below are some extra images from the collection aligned using the Pyramid method with NCC as the scoring metric:</p>
 
