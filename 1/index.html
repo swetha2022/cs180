@@ -8,35 +8,26 @@
             margin: 20px;
             text-align: center; 
         }
-        .flex-center {
-            display: flex;
-            justify-content: center; 
-            gap: 20px;
-            flex-wrap: wrap; 
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-        figure {
-            margin: 0;
-        }
-        figcaption {
-            margin-top: 5px;
-        }
-
         .align-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start; /* left-align the content */
             gap: 10px;
         }
 
         .align-container p {
-            text-align: center;
-            max-width: 800px; /* adjust as needed */
+            text-align: left;
+            max-width: 960px; /* total width of your images row (3 images × 300px + gaps) */
+        }
+
+        .flex-center {
+            display: flex;
+            gap: 20px; /* space between images */
+            flex-wrap: wrap;
         }
 
         .flex-center img {
-            max-width: 300px; /* adjust image size as needed */
+            max-width: 300px;
         }
     </style>
 </head>
