@@ -93,9 +93,9 @@
         <figure style="width: 25%;">
             <img src="./outputs_simple/ncc/melons.jpg" alt="Error" style="width: 100%;">
             <figcaption>
-                <p>Green Displacement: (15, 8)</p>
-                <p>Red Displacement: (15, 15)</p>
-                <p>Time Taken: 137.51 seconds</p>
+                Green Displacement: (15, 8)<br>
+                Red Displacement: (15, 15)<br>
+                Time Taken: 137.51 seconds
             </figcaption>
         </figure>
     </div>
@@ -103,7 +103,7 @@
     <h2>Part 2: Pyramid Alignment</h2>
     <p>To speed up the runtime and improve alignment on larger image files, I implemented an image pyramid with multiple resolutions of the image, where each level was downsampled by a factor of 2. The pyramid included the original image as well as progressively downsampled versions for up to 5 levels. I then reduced the search window to a displacement range of -7 to 7 pixels in both the x and y directions. Using a recursive approach, I began alignment at the coarsest resolution with this smaller window. As the recursion moved to finer resolutions, I applied the same displacement window, but centered around the optimal displacement returned from the previous (coarser) level scaled appropriately to the new resolution. Similar to the naive approach, I evaluated alignments of the R and G plates with the B plate using both Euclidean distance and NCC, with the 10% crop added to each side of the plates before computing the scores.</p>
     
-    <p>Below are several examples of images aligned using this method with NCC as the scoring metric. Note that the Emir image still shows some slight misalignment due to differences in brightness across the channels.</p>
+    <p>Below are several examples of images aligned using this method with NCC as the scoring metric. Note that the Emir image still shows some slight misalignment due to differences in brightness across the channels:</p>
 
     <div class="flex-center">
         <figure style="width: 25%;">
