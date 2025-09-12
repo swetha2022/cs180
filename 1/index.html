@@ -3,31 +3,34 @@
 <head>
     <title>Project 1</title>
     <style>
-        body {
-            font-family: Georgia, sans-serif;
-            margin: 20px;
-            text-align: center; 
-        }
-        .align-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start; /* left-align the content */
-            gap: 10px;
-        }
-
-        .align-container p {
-            text-align: left;
-            max-width: 960px; /* total width of your images row (3 images × 300px + gaps) */
-        }
-
         .flex-center {
             display: flex;
-            gap: 20px; /* space between images */
+            gap: 20px;
             flex-wrap: wrap;
         }
 
+        .flex-center figure {
+            width: 25%; 
+            margin: 0;  
+        }
+
         .flex-center img {
-            max-width: 300px;
+            width: 100%; 
+            display: block;
+        }
+
+        .text-container {
+            width: calc(25% * 3 + 20px * 2); 
+            max-width: 100%;
+        }
+
+        .text-container p {
+            text-align: left;
+            margin: 0 0 10px 0;
+        }
+
+        figcaption p {
+            margin: 0;
         }
     </style>
 </head>
@@ -40,9 +43,9 @@
 
     <h2>Part 1: Simple Alignment</h2>
 
-    <div class="align-container">
+    <div class="text-container">
         <p>In this part, I implemented a naive algorithm to align the R and G plates with the B plate using both Euclidean distance and Normalized Cross-Correlation (NCC). The algorithm worked as follows: I performed an exhaustive search over a displacement window ranging from -15 to 15 in both the x and y directions, shifting the R and G plates relative to the B plate using <code>np.roll()</code>. For each displacement, I computed a score based on either Euclidean distance or NCC between the shifted plate and the B plate. To prevent the borders from introducing noise into the results, I cropped 10% from each side of the plates and only used the cropped regions when computing the scores. The displacement that produced the best score was selected as the optimal alignment—first between the G and B plates, and then between the R and B plates. Overall, NCC yielded more accurate alignments than Euclidean distance, especially for images with significant variations in brightness and contrast.</p>
-
+        
         <p>Below are several examples of images aligned using this method with NCC as the scoring metric.</p>
     </div>
 
