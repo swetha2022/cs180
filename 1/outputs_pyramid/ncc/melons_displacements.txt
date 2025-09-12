@@ -1,0 +1,3 @@
+Green Displacement: (82, 11)
+Red Displacement: (178, 13)
+Time Taken: 44.82634401321411 seconds
