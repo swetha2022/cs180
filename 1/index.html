@@ -43,7 +43,7 @@
 
     <br>
     <h2>Part 1: Simple Alignment</h2>
-    <p>In this part, I implemented a naive algorithm to align the R and G plates with the B plate using both Euclidean distance and Normalized Cross-Correlation (NCC). The algorithm worked as follows: I performed an exhaustive search over a displacement window ranging from -15 to 15 in both the x and y directions, shifting the R and G plates relative to the B plate using <code>np.roll()</code>. For each displacement, I computed a score based on either Euclidean distance or NCC between the shifted plate and the B plate. To prevent the borders from introducing noise into the results, I cropped 10% from each side of the plates and only used the cropped regions when computing the scores. The displacement that produced the best score was selected as the optimal alignment—first between the G and B plates, and then between the R and B plates. Overall, NCC yielded more accurate alignments than Euclidean distance, especially for images with significant variations in brightness and contrast.</p>
+    <p>In this part, I implemented a naive algorithm to align the R and G plates with the B plate using both Euclidean distance and Normalized Cross-Correlation (NCC). The algorithm worked as follows: I performed an exhaustive search over a displacement window ranging from -15 to 15 in both the x and y directions, shifting the R and G plates relative to the B plate using <code>np.roll()</code>. For each displacement, I computed a score based on either Euclidean distance or NCC between the shifted plate and the B plate. To prevent the borders from introducing noise into the results, I cropped 10% from each side of the plates and only used the cropped regions when computing the scores. The displacement that produced the best score was selected as the optimal alignment for that plate and the B plate. Overall, NCC yielded more accurate alignments than Euclidean distance, especially for images with significant variations in brightness and contrast.</p>
 
     <p>Below are some examples of images aligned using this method with NCC as the scoring metric:</p>
 
@@ -51,6 +51,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/cathedral.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Cathedral<br>
                 Green X-Y Displacement: (5, 2)<br>
                 Red X-Y Displacement: (12, 3)<br>
                 Time Taken: 0.88 seconds
@@ -59,6 +60,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_simple/ncc/monastery.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Monastery<br>
                 Green X-Y Displacement: (-3, 2)<br>
                 Red X-Y Displacement: (3, 2)<br>
                 Time Taken: 0.91 seconds
@@ -67,6 +69,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_simple/ncc/tobolsk.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Tobolsk<br>
                 Green X-Y Displacement: (3, 3)<br>
                 Red X-Y Displacement: (6, 3)<br>
                 Time Taken: 0.93 seconds
@@ -80,6 +83,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_simple/ncc/church.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Church<br>
                 Green X-Y Displacement: (15, 4)<br>
                 Red X-Y Displacement: (15, -14)<br>
                 Time Taken: 156.35 seconds
@@ -88,6 +92,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_simple/ncc/emir.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Emir<br>
                 Green X-Y Displacement: (15, 15)<br>
                 Red X-Y Displacement: (15, -5)<br>
                 Time Taken: 147.30 seconds
@@ -96,6 +101,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_simple/ncc/melons.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Melons<br>
                 Green X-Y Displacement: (15, 8)<br>
                 Red X-Y Displacement: (15, 15)<br>
                 Time Taken: 137.51 seconds
@@ -105,7 +111,7 @@
 
     <br>
     <h2>Part 2: Pyramid Alignment</h2>
-    <p>To speed up the runtime and improve alignment on larger image files, I implemented an image pyramid with multiple resolutions of the image, where each level was downsampled by a factor of 2. The pyramid included the original image as well as progressively downsampled versions for up to 5 levels. I then reduced the search window to a displacement range of -7 to 7 pixels in both the x and y directions. Using a recursive approach, I began alignment at the coarsest resolution with this smaller window. As the recursion moved to finer resolutions, I applied the same displacement window, but centered around the optimal displacement returned from the previous (coarser) level scaled appropriately to the new resolution. Similar to the naive approach, I evaluated alignments of the R and G plates with the B plate using both Euclidean distance and NCC, with the 10% crop added to each side of the plates before computing the scores.</p>
+    <p>To speed up the runtime and improve alignment on larger image files, I implemented an image pyramid with multiple resolutions of the image, where each level was a downsampled version of the previous one by a factor of 2. The pyramid included the original image as well as progressively downsampled versions for up to 5 levels. I then reduced the search window to a displacement range of -7 to 7 pixels in both the x and y directions. Using a recursive approach, I began alignment at the coarsest resolution with this smaller window. As the recursion moved to finer resolutions, I applied the same displacement window, but centered around the optimal displacement returned from the previous (coarser) level scaled appropriately to the new resolution. Similar to the naive approach, I evaluated alignments of the R and G plates with the B plate using both Euclidean distance and NCC, with the 10% crop added to each side of the plates before computing the scores.</p>
     
     <p>Below are several examples of images aligned using this method with NCC as the scoring metric. Note that the Emir image still shows some slight misalignment due to differences in brightness across the channels:</p>
 
@@ -113,6 +119,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/cathedral.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Cathedral<br>
                 Green X-Y Displacement: (5, 2)<br>
                 Red X-Y Displacement: (12, 3)<br>
                 Time Taken: 0.38 seconds
@@ -121,6 +128,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/church.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Church<br>
                 Green X-Y Displacement: (25, 4)<br>
                 Red X-Y Displacement: (58, -4)<br>
                 Time Taken: 43.03 seconds
@@ -129,6 +137,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/emir.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Emir<br>
                 Green X-Y Displacement: (49, 24)<br>
                 Red X-Y Displacement: (104, 56)<br>
                 Time Taken: 44.60 seconds
@@ -140,6 +149,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/harvesters.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Harvesters<br>
                 Green X-Y Displacement: (60, 17)<br>
                 Red X-Y Displacement: (124, 13)<br>
                 Time Taken: 43.81 seconds
@@ -148,6 +158,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/icon.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Icon<br>
                 Green X-Y Displacement: (41, 17)<br>
                 Red X-Y Displacement: (89, 23)<br>
                 Time Taken: 44.63 seconds
@@ -156,6 +167,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/italil.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Italil<br>
                 Green X-Y Displacement: (38, 21)<br>
                 Red X-Y Displacement: (76, 35)<br>
                 Time Taken: 44.53 seconds
@@ -167,6 +179,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/lastochikino.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Lastochikino<br>
                 Green X-Y Displacement: (-3, -2)<br>
                 Red X-Y Displacement: (75, -9)<br>
                 Time Taken: 45.11 seconds
@@ -175,6 +188,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/lugano.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Lugano<br>
                 Green X-Y Displacement: (41, -16)<br>
                 Red X-Y Displacement: (93, -29)<br>
                 Time Taken: 45.80 seconds
@@ -183,6 +197,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/melons.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Melons<br>
                 Green X-Y Displacement: (82, 11)<br>
                 Red X-Y Displacement: (178, 13)<br>
                 Time Taken: 44.83 seconds
@@ -194,6 +209,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/monastery.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Monastery<br>
                 Green X-Y Displacement: (-3, 2)<br>
                 Red X-Y Displacement: (3, 2)<br>
                 Time Taken: 0.38 seconds
@@ -202,6 +218,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/self_portrait.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Self Portrait<br>
                 Green X-Y Displacement: (79, 29)<br>
                 Red X-Y Displacement: (176, 37)<br>
                 Time Taken: 45.56 seconds
@@ -210,6 +227,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/siren.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Siren<br>
                 Green X-Y Displacement: (49, -6)<br>
                 Red X-Y Displacement: (96, -25)<br>
                 Time Taken: 45.21 seconds
@@ -221,6 +239,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/three_generations.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Three Generations<br>
                 Green X-Y Displacement: (53, 14)<br>
                 Red X-Y Displacement: (112, 11)<br>
                 Time Taken: 43.59 seconds
@@ -229,6 +248,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/tobolsk.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Tobolsk<br>
                 Green X-Y Displacement: (3, 3)<br>
                 Red X-Y Displacement: (6, 3)<br>
                 Time Taken: 0.38 seconds<br>
@@ -244,6 +264,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/peonies.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Peonies<br>
                 Green X-Y Displacement: (51, 3)<br>
                 Red X-Y Displacement: (104, -6)<br>
                 Time Taken: 45.40 seconds
@@ -252,6 +273,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/milan_cathedral.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Milan Cathedral<br>
                 Green X-Y Displacement: (57, 12)<br>
                 Red X-Y Displacement: (125, 24)<br>
                 Time Taken: 47.23 seconds
@@ -260,6 +282,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/mosque.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Mosque<br>
                 Green X-Y Displacement: (25, 10)<br>
                 Red X-Y Displacement: (70, 11)<br>
                 Time Taken: 43.51 seconds
@@ -271,6 +294,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/trinity_cathedral.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Trinity Cathedral<br>
                 Green X-Y Displacement: (39, 6)<br>
                 Red X-Y Displacement: (129, 12)<br>
                 Time Taken: 45.68 seconds
@@ -279,6 +303,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/bashkir_dog.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Bashkir Dog<br>
                 Green X-Y Displacement: (61, 8)<br>
                 Red X-Y Displacement: (138, 8)<br>
                 Time Taken: 45.77 seconds
@@ -287,6 +312,7 @@
         <figure style="width: 25%;">
             <img src="./outputs_pyramid/ncc/crew.jpg" alt="Error" style="width: 100%;">
             <figcaption>
+                Crew<br>
                 Green X-Y Displacement: (21, 18)<br>
                 Red X-Y Displacement: (56, 30)<br>
                 Time Taken: 44.46 seconds
