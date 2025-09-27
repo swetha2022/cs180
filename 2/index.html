@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 2: Fun with Filters and Frequencies</title>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            margin: 30px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center; 
+            gap: 20px;
+            flex-wrap: wrap; 
+            margin: 20px 0;
+        }
+        figure {
+            margin: 0;
+            width: 28%;
+        }
+        figure img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+        }
+        figcaption {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 6px;
+        }
+        p {
+            text-align: justify;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project 2: Fun with Filters and Frequencies</h1>
+    <h3>Webpage Link: <a href="https://swetha2022.github.io/cs180/2/index.html">https://swetha2022.github.io/cs180/2/index.html</a></h3>
+
+    <br>
+    <h2>Introduction</h2>
+    <p>
+        In this project, I implemented a variety of classic image processing techniques that explore 
+        convolution, edge detection, frequency filtering, and multi-resolution blending. 
+        These experiments build intuition on how images can be decomposed into frequency components 
+        and recombined to produce compelling effects such as sharpening, hybrid images, 
+        and seamless blending.
+    </p>
+
+    <!-- ====================== PART 1 ====================== -->
+    <h2>Part 1: Filters and Edges</h2>
+
+    <h3>Part 1.1: Convolutions from Scratch!</h3>
+    <p>
+        I implemented convolution using four nested loops, then optimized to two loops using NumPy slicing. 
+        Padding was implemented with zeros. I compared the results to 
+        <code>scipy.signal.convolve2d</code> and found matching outputs, though the 
+        built-in function is significantly faster. Below I show the result of applying a 
+        9x9 box filter and finite difference operators on my own grayscale portrait:
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part1_1_box.png" alt="Box Filter">
+            <figcaption>Box filter result (9x9)</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part1_1_dx.png" alt="Dx">
+            <figcaption>Finite difference in x (Dx)</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part1_1_dy.png" alt="Dy">
+            <figcaption>Finite difference in y (Dy)</figcaption>
+        </figure>
+    </div>
+
+    <h3>Part 1.2: Finite Difference Operator</h3>
+    <p>
+        Using the classic Cameraman image, I computed gradients using convolution with Dx and Dy, 
+        then calculated the gradient magnitude. A threshold was applied to binarize the edge map.
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part1_2_dx.png" alt="dx">
+            <figcaption>∂I/∂x</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part1_2_dy.png" alt="dy">
+            <figcaption>∂I/∂y</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part1_2_edges.png" alt="edges">
+            <figcaption>Binarized edge map</figcaption>
+        </figure>
+    </div>
+
+    <h3>Part 1.3: Derivative of Gaussian (DoG)</h3>
+    <p>
+        To reduce noise, I smoothed with a Gaussian before computing gradients. 
+        Alternatively, I created DoG filters by convolving the Gaussian kernel with Dx and Dy. 
+        Both approaches produced nearly identical results, with cleaner edges compared to raw finite differences.
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part1_3_gaussian.png" alt="gaussian">
+            <figcaption>Gaussian-smoothed Cameraman</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part1_3_dogx.png" alt="dogx">
+            <figcaption>DoG filter (x)</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part1_3_dogy.png" alt="dogy">
+            <figcaption>DoG filter (y)</figcaption>
+        </figure>
+    </div>
+
+    <h3>Bells & Whistles: Gradient Orientation Visualization</h3>
+    <p>
+        I visualized gradient orientations using HSV colormap, where hue encodes orientation and value encodes magnitude.
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part1_3_orientation.png" alt="orientation">
+            <figcaption>Gradient orientations (HSV)</figcaption>
+        </figure>
+    </div>
+
+    <!-- ====================== PART 2 ====================== -->
+    <h2>Part 2: Applications of Filtering</h2>
+
+    <h3>Part 2.1: Image Sharpening</h3>
+    <p>
+        I implemented unsharp masking by subtracting a Gaussian-blurred image from the original 
+        to isolate high frequencies, then amplifying and adding them back. 
+        Below are examples on the Taj Mahal and my own images:
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part2_1_taj.png" alt="Taj Sharpened">
+            <figcaption>Taj Mahal sharpened</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part2_1_blurry.png" alt="Blurry">
+            <figcaption>Blurry input</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part2_1_sharp.png" alt="Sharpened">
+            <figcaption>Sharpened result</figcaption>
+        </figure>
+    </div>
+
+    <h3>Part 2.2: Hybrid Images</h3>
+    <p>
+        I created hybrid images by combining low frequencies of one image with high frequencies of another. 
+        Below is the Derek + Nutmeg hybrid, shown alongside Fourier spectra of inputs and outputs.
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part2_2_derek.png" alt="Derek">
+            <figcaption>Derek (high-pass)</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part2_2_nutmeg.png" alt="Nutmeg">
+            <figcaption>Nutmeg (low-pass)</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part2_2_hybrid.png" alt="Hybrid">
+            <figcaption>Hybrid (Derek+Nutmeg)</figcaption>
+        </figure>
+    </div>
+
+    <h3>Part 2.3: Gaussian and Laplacian Stacks</h3>
+    <p>
+        I implemented Gaussian and Laplacian stacks without downsampling. Below I show 
+        Gaussian and Laplacian levels for the Apple + Orange (Oraple) blending experiment:
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part2_3_gaussian.png" alt="Gaussian Stack">
+            <figcaption>Gaussian Stack</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part2_3_laplacian.png" alt="Laplacian Stack">
+            <figcaption>Laplacian Stack</figcaption>
+        </figure>
+    </div>
+
+    <h3>Part 2.4: Multiresolution Blending (Oraple)</h3>
+    <p>
+        Using Gaussian stacks of masks and Laplacian stacks of images, 
+        I blended two images seamlessly. Below are the classic Oraple and my own creative blends.
+    </p>
+    <div class="flex-center">
+        <figure>
+            <img src="./outputs/part2_4_oraple.png" alt="Oraple">
+            <figcaption>Oraple result (Apple + Orange)</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part2_4_custom1.png" alt="Blend1">
+            <figcaption>Custom Blend 1</figcaption>
+        </figure>
+        <figure>
+            <img src="./outputs/part2_4_custom2.png" alt="Blend2">
+            <figcaption>Custom Blend 2 (irregular mask)</figcaption>
+        </figure>
+    </div>
+
+    <br>
+    <h2>Conclusion</h2>
+    <p>
+        This project gave me intuition about how filters extract edges, 
+        how frequencies shape image perception, and how blending across scales 
+        can create seamless composites. The most important insight was 
+        understanding the interplay between high/low frequency signals 
+        in hybrid images and blending.
+    </p>
+</body>
+</html>
