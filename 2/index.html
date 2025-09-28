@@ -70,57 +70,64 @@
     I implemented convolution using four nested loops, then optimized to two loops using NumPy slicing. Padding was implemented with zeros. I compared the results to <code>scipy.signal.convolve2d</code>. Below are comparisons for my portrait:
   </p>
 
-  <div class="matrix matrix-4">
-    <figure><img src="./outputs/part1_1_original.png"><figcaption>Original</figcaption></figure>
-    <figure><img src="./outputs/part1_1_box4.png"><figcaption>Box (4 loops)</figcaption></figure>
-    <figure><img src="./outputs/part1_1_dx4.png"><figcaption>Dx (4 loops)</figcaption></figure>
-    <figure><img src="./outputs/part1_1_dy4.png"><figcaption>Dy (4 loops)</figcaption></figure>
+  <div class="flex-center">
+    <figure><img src="./task_1_1/swetha.jpg"><figcaption>Original</figcaption></figure>
   </div>
-
-  <div class="matrix matrix-4">
-    <figure><img src="./outputs/part1_1_box2.png"><figcaption>Box (2 loops)</figcaption></figure>
-    <figure><img src="./outputs/part1_1_dx2.png"><figcaption>Dx (2 loops)</figcaption></figure>
-    <figure><img src="./outputs/part1_1_dy2.png"><figcaption>Dy (2 loops)</figcaption></figure>
-    <figure><img src="./outputs/part1_1_builtin.png"><figcaption>Built-in (scipy)</figcaption></figure>
+  
+  <div class="matrix matrix-3">
+    <figure><img src="./task_1_1/task_1_1_convolved_2_loops_box.png"><figcaption>Box Filter (2 loops)</figcaption></figure>
+    <figure><img src="./task_1_1/task_1_1_convolved_4_loops_box.png"><figcaption>Box Filter (4 loops)</figcaption></figure>
+    <figure><img src="./task_1_1/task_1_1_convolved_built_in_box.png"><figcaption>Box Filter (built-in)</figcaption></figure>
   </div>
-
+  
+  <div class="matrix matrix-3">
+    <figure><img src="./task_1_1/task_1_1_convolved_2_loops_dx.png"><figcaption>Dx Filter (2 loops)</figcaption></figure>
+    <figure><img src="./task_1_1/task_1_1_convolved_4_loops_dx.png"><figcaption>Dx Filter (4 loops)</figcaption></figure>
+    <figure><img src="./task_1_1/task_1_1_convolved_built_in_dx.png"><figcaption>Dx Filter (built-in)</figcaption></figure>
+  </div>
+  
+  <div class="matrix matrix-3">
+    <figure><img src="./task_1_1/task_1_1_convolved_2_loops_dy.png"><figcaption>Dy Filter (2 loops)</figcaption></figure>
+    <figure><img src="./task_1_1/task_1_1_convolved_4_loops_dy.png"><figcaption>Dy Filter (4 loops)</figcaption></figure>
+    <figure><img src="./task_1_1/task_1_1_convolved_built_in_dy.png"><figcaption>Dy Filter (built-in)</figcaption></figure>
+  </div>
+  
   <h4 style="text-align:center">Timing Results</h4>
   <p>
     <b>Box Filter:</b> 4 loops = 9.89s, 2 loops = 1.21s, scipy = 0.66s <br>
     <b>Dx Filter:</b> 4 loops = 0.61s, 2 loops = 1.16s, scipy = 0.0048s <br>
     <b>Dy Filter:</b> 4 loops = 0.72s, 2 loops = 1.17s, scipy = 0.0060s
-  </p>
+  </p>  
 
   <!-- Task 1.2 -->
   <h3>Part 1.2: Finite Difference Operator</h3>
   <div class="flex-center">
-    <figure><img src="./outputs/part1_2_cameraman.png"><figcaption>Cameraman original</figcaption></figure>
-    <figure><img src="./outputs/part1_2_dx.png"><figcaption>∂I/∂x</figcaption></figure>
-    <figure><img src="./outputs/part1_2_dy.png"><figcaption>∂I/∂y</figcaption></figure>
-    <figure><img src="./outputs/part1_2_gradmag.png"><figcaption>Gradient magnitude</figcaption></figure>
-    <figure><img src="./outputs/part1_2_edges.png"><figcaption>Edge map (threshold=0.3)</figcaption></figure>
+    <figure><img src="./task_1_2/cameraman.png"><figcaption>Cameraman Original</figcaption></figure>
+    <figure><img src="./task_1_2/task_1_2_convolved_dx.png"><figcaption>Convolved Dx</figcaption></figure>
+    <figure><img src="./task_1_2/task_1_2_convolved_dy.png"><figcaption>Convolved Dy</figcaption></figure>
+    <figure><img src="./task_1_2/task_1_2_gradient_magnitude.png"><figcaption>Gradient Magnitude</figcaption></figure>
+    <figure><img src="./task_1_2/task_1_2_edge_map.png"><figcaption>Edge Map (threshold=0.3)</figcaption></figure>
   </div>
 
   <!-- Task 1.3 -->
   <h3>Part 1.3: Derivative of Gaussian (DoG)</h3>
   <div class="matrix matrix-6">
-    <figure><img src="./outputs/part1_3_cameraman.png"><figcaption>Original</figcaption></figure>
-    <figure><img src="./outputs/part1_3_gaussian.png"><figcaption>Gaussian blur</figcaption></figure>
-    <figure><img src="./outputs/part1_3_smoothdx.png"><figcaption>Smoothed Dx</figcaption></figure>
-    <figure><img src="./outputs/part1_3_smoothdy.png"><figcaption>Smoothed Dy</figcaption></figure>
-    <figure><img src="./outputs/part1_3_gradmag.png"><figcaption>Gradient mag (smoothed)</figcaption></figure>
-    <figure><img src="./outputs/part1_3_edges.png"><figcaption>Edge map (threshold=0.1)</figcaption></figure>
-  </div>
+    <figure><img src="./task_1_3/cameraman.png"><figcaption>Original</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_gaussian_filter.png"><figcaption>Gaussian Filter</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_convolved_smoothed_dx.png"><figcaption>Smoothed Dx</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_convolved_smoothed_dy.png"><figcaption>Smoothed Dy</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_gradient_magnitude_smoothed.png"><figcaption>Smoothed Gradient Magnitude</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_edge_map.png"><figcaption>Edge Map (threshold=0.1)</figcaption></figure>
+  </div>  
 
-  <div class="matrix matrix-7">
-    <figure><img src="./outputs/part1_3_cameraman.png"><figcaption>Original</figcaption></figure>
-    <figure><img src="./outputs/part1_3_dogx.png"><figcaption>DoG x filter</figcaption></figure>
-    <figure><img src="./outputs/part1_3_dogy.png"><figcaption>DoG y filter</figcaption></figure>
-    <figure><img src="./outputs/part1_3_dogdx.png"><figcaption>DoG convolved Dx</figcaption></figure>
-    <figure><img src="./outputs/part1_3_dogdy.png"><figcaption>DoG convolved Dy</figcaption></figure>
-    <figure><img src="./outputs/part1_3_doggradmag.png"><figcaption>Gradient mag (DoG)</figcaption></figure>
-    <figure><img src="./outputs/part1_3_dogedges.png"><figcaption>Edge map (threshold=0.1)</figcaption></figure>
-  </div>
+  <div class="matrix matrix-6">
+    <figure><img src="./task_1_3/task_1_3_dog_x.png"><figcaption>DoG x Filter</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_dog_y.png"><figcaption>DoG y Filter</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_dog_convolved_smoothed_dx.png"><figcaption>Smoothed Dx</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_dog_convolved_smoothed_dy.png"><figcaption>Smoothed Dy</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_dog_gradient_magnitude_smoothed.png"><figcaption>Smoothed Gradient Magnitude</figcaption></figure>
+    <figure><img src="./task_1_3/task_1_3_dog_edge_map.png"><figcaption>Edge Map (threshold=0.1)</figcaption></figure>
+  </div>  
 
   <!-- ====================== PART 2 ====================== -->
   <h2>Part 2: Applications of Filtering</h2>

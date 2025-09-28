@@ -1,0 +1,14 @@
+Box Filter:
+Convolution with four loops took: 9.894341945648193 seconds
+Convolution with two loops took: 1.2058360576629639 seconds
+Convolution with scipy.signal.convolve2d took: 0.6618118286132812 seconds
+
+Dx Filter:
+Convolution with four loops took: 0.607964038848877 seconds
+Convolution with two loops took: 1.1559250354766846 seconds
+Convolution with scipy.signal.convolve2d took: 0.00481104850769043 seconds
+
+Dy Filter:
+Convolution with four loops took: 0.7191832065582275 seconds
+Convolution with two loops took: 1.1683320999145508 seconds
+Convolution with scipy.signal.convolve2d took: 0.005980014801025391 seconds
