@@ -1,183 +1,260 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Fun with Filters Report</title>
+  <title>Project 2: Fun with Filters and Frequencies</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background: #fafafa;
-      color: #333;
+      font-family: Georgia, serif;
+      margin: 30px;
       line-height: 1.6;
     }
-    h2 {
-      margin-top: 40px;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 5px;
+    h1, h2, h3 {
+      text-align: center;
     }
-    h3 {
-      margin-top: 30px;
-      color: #444;
+    .flex-center {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    figure {
+      margin: 0;
+      width: 20%;
+    }
+    figure img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    }
+    figcaption {
+      font-size: 13px;
+      text-align: center;
+      margin-top: 6px;
+    }
+    p {
+      text-align: justify;
+    }
+    code {
+      background: #eee;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: monospace;
     }
     .matrix {
       display: grid;
-      gap: 15px;
+      gap: 20px;
       margin: 20px 0;
     }
-    .matrix-2 { grid-template-columns: repeat(2, 1fr); }
-    .matrix-3 { grid-template-columns: repeat(3, 1fr); }
     .matrix-4 { grid-template-columns: repeat(4, 1fr); }
     .matrix-5 { grid-template-columns: repeat(5, 1fr); }
+    .matrix-3 { grid-template-columns: repeat(3, 1fr); }
     .matrix-7 { grid-template-columns: repeat(7, 1fr); }
-    figure {
-      margin: 0;
-      text-align: center;
-    }
-    figure img {
-      max-width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-    figcaption {
-      font-size: 14px;
-      margin-top: 5px;
-      color: #555;
-    }
   </style>
 </head>
 <body>
+  <h1>Project 2: Fun with Filters and Frequencies</h1>
+  <h3>Webpage Link: <a href="https://swetha2022.github.io/cs180/2/index.html">https://swetha2022.github.io/cs180/2/index.html</a></h3>
 
-<h1>Project Report: Fun with Filters</h1>
+  <h2>Introduction</h2>
+  <p>
+    In this project, I implemented a variety of classic image processing techniques that explore convolution, edge detection, frequency filtering, and multi-resolution blending. These experiments build intuition on how images can be decomposed into frequency components and recombined to produce compelling effects such as sharpening, hybrid images, and seamless blending.
+  </p>
 
-<!-- Task 1.1 -->
-<h2>Task 1.1: Finite Difference Operators</h2>
-<div class="matrix matrix-4">
-  <figure><img src="./task_1_1/task_1_1_convolved_2_loops_box.png"><figcaption>2-loops Box</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_2_loops_dx.png"><figcaption>2-loops dx</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_2_loops_dy.png"><figcaption>2-loops dy</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_4_loops_box.png"><figcaption>4-loops Box</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_4_loops_dx.png"><figcaption>4-loops dx</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_4_loops_dy.png"><figcaption>4-loops dy</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_built_in_box.png"><figcaption>Built-in Box</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_built_in_dx.png"><figcaption>Built-in dx</figcaption></figure>
-  <figure><img src="./task_1_1/task_1_1_convolved_built_in_dy.png"><figcaption>Built-in dy</figcaption></figure>
-</div>
+  <!-- ====================== PART 1 ====================== -->
+  <h2>Part 1: Filters and Edges</h2>
 
-<!-- Task 1.2 -->
-<h2>Task 1.2: Edge Detection</h2>
-<div class="matrix matrix-2">
-  <figure><img src="./task_1_2/task_1_2_convolved_dx.png"><figcaption>dx</figcaption></figure>
-  <figure><img src="./task_1_2/task_1_2_convolved_dy.png"><figcaption>dy</figcaption></figure>
-  <figure><img src="./task_1_2/task_1_2_gradient_magnitude.png"><figcaption>Gradient Magnitude</figcaption></figure>
-  <figure><img src="./task_1_2/task_1_2_edge_map.png"><figcaption>Edge Map</figcaption></figure>
-</div>
+  <!-- Task 1.1 -->
+  <h3>Part 1.1: Convolutions from Scratch!</h3>
+  <p>
+    I implemented convolution using four nested loops, then optimized to two loops using NumPy slicing. Padding was implemented with zeros. I compared the results to <code>scipy.signal.convolve2d</code>. Below are comparisons for my portrait:
+  </p>
 
-<!-- Task 1.3 -->
-<h2>Task 1.3: Edge Detection with Smoothing (DoG)</h2>
-<div class="matrix matrix-3">
-  <figure><img src="./task_1_3/task_1_3_convolved_smoothed_dx.png"><figcaption>Smoothed dx</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_convolved_smoothed_dy.png"><figcaption>Smoothed dy</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_gradient_magnitude_smoothed.png"><figcaption>Gradient Magnitude (Smoothed)</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_edge_map.png"><figcaption>Edge Map (Smoothed)</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_gaussian_filter.png"><figcaption>Gaussian Filter</figcaption></figure>
-</div>
+  <div class="matrix matrix-4">
+    <figure><img src="./outputs/part1_1_original.png"><figcaption>Original</figcaption></figure>
+    <figure><img src="./outputs/part1_1_box4.png"><figcaption>Box (4 loops)</figcaption></figure>
+    <figure><img src="./outputs/part1_1_dx4.png"><figcaption>Dx (4 loops)</figcaption></figure>
+    <figure><img src="./outputs/part1_1_dy4.png"><figcaption>Dy (4 loops)</figcaption></figure>
+  </div>
 
-<h3>DoG on Dog Image</h3>
-<div class="matrix matrix-3">
-  <figure><img src="./task_1_3/task_1_3_dog_convolved_smoothed_dx.png"><figcaption>Dog dx</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_dog_convolved_smoothed_dy.png"><figcaption>Dog dy</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_dog_gradient_magnitude_smoothed.png"><figcaption>Dog Gradient Magnitude</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_dog_edge_map.png"><figcaption>Dog Edge Map</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_dog_x.png"><figcaption>Dog x (DoG)</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_dog_y.png"><figcaption>Dog y (DoG)</figcaption></figure>
-  <figure><img src="./task_1_3/task_1_3_dog_edge_map.png"><figcaption>Dog DoG Edge Map</figcaption></figure>
-</div>
+  <div class="matrix matrix-4">
+    <figure><img src="./outputs/part1_1_box2.png"><figcaption>Box (2 loops)</figcaption></figure>
+    <figure><img src="./outputs/part1_1_dx2.png"><figcaption>Dx (2 loops)</figcaption></figure>
+    <figure><img src="./outputs/part1_1_dy2.png"><figcaption>Dy (2 loops)</figcaption></figure>
+    <figure><img src="./outputs/part1_1_builtin.png"><figcaption>Built-in (scipy)</figcaption></figure>
+  </div>
 
-<!-- Task 2.1 -->
-<h2>Task 2.1: Image Sharpening</h2>
+  <h4 style="text-align:center">Timing Results</h4>
+  <p>
+    <b>Box Filter:</b> 4 loops = 9.89s, 2 loops = 1.21s, scipy = 0.66s <br>
+    <b>Dx Filter:</b> 4 loops = 0.61s, 2 loops = 1.16s, scipy = 0.0048s <br>
+    <b>Dy Filter:</b> 4 loops = 0.72s, 2 loops = 1.17s, scipy = 0.0060s
+  </p>
 
-<h3>Taj Mahal</h3>
-<div class="matrix matrix-5">
-  <figure><img src="./task_2_1/task_2_1_taj_blurred_image.png"><figcaption>Taj blurred</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_taj_high_frequencies_image.png"><figcaption>Taj high freq</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_taj_sharpened_image_0.5.png"><figcaption>Taj sharpened (0.5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_taj_sharpened_image_1.png"><figcaption>Taj sharpened (1)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_taj_sharpened_image_2.png"><figcaption>Taj sharpened (2)</figcaption></figure>
-</div>
+  <!-- Task 1.2 -->
+  <h3>Part 1.2: Finite Difference Operator</h3>
+  <div class="flex-center">
+    <figure><img src="./outputs/part1_2_cameraman.png"><figcaption>Cameraman original</figcaption></figure>
+    <figure><img src="./outputs/part1_2_dx.png"><figcaption>∂I/∂x</figcaption></figure>
+    <figure><img src="./outputs/part1_2_dy.png"><figcaption>∂I/∂y</figcaption></figure>
+    <figure><img src="./outputs/part1_2_gradmag.png"><figcaption>Gradient magnitude</figcaption></figure>
+    <figure><img src="./outputs/part1_2_edges.png"><figcaption>Edge map (threshold=0.3)</figcaption></figure>
+  </div>
 
-<h3>Statue</h3>
-<div class="matrix matrix-3">
-  <figure><img src="./task_2_1/task_2_1_statue_0.5_blurred_image.png"><figcaption>Statue blurred (0.5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_0.5_high_frequencies_image.png"><figcaption>Statue high freq (0.5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_0.5_sharpened_image.png"><figcaption>Statue sharpened (0.5)</figcaption></figure>
+  <!-- Task 1.3 -->
+  <h3>Part 1.3: Derivative of Gaussian (DoG)</h3>
+  <div class="matrix matrix-6">
+    <figure><img src="./outputs/part1_3_cameraman.png"><figcaption>Original</figcaption></figure>
+    <figure><img src="./outputs/part1_3_gaussian.png"><figcaption>Gaussian blur</figcaption></figure>
+    <figure><img src="./outputs/part1_3_smoothdx.png"><figcaption>Smoothed Dx</figcaption></figure>
+    <figure><img src="./outputs/part1_3_smoothdy.png"><figcaption>Smoothed Dy</figcaption></figure>
+    <figure><img src="./outputs/part1_3_gradmag.png"><figcaption>Gradient mag (smoothed)</figcaption></figure>
+    <figure><img src="./outputs/part1_3_edges.png"><figcaption>Edge map (threshold=0.1)</figcaption></figure>
+  </div>
 
-  <figure><img src="./task_2_1/task_2_1_statue_1_blurred_image.png"><figcaption>Statue blurred (1)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_1_high_frequencies_image.png"><figcaption>Statue high freq (1)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_1_sharpened_image.png"><figcaption>Statue sharpened (1)</figcaption></figure>
+  <div class="matrix matrix-7">
+    <figure><img src="./outputs/part1_3_cameraman.png"><figcaption>Original</figcaption></figure>
+    <figure><img src="./outputs/part1_3_dogx.png"><figcaption>DoG x filter</figcaption></figure>
+    <figure><img src="./outputs/part1_3_dogy.png"><figcaption>DoG y filter</figcaption></figure>
+    <figure><img src="./outputs/part1_3_dogdx.png"><figcaption>DoG convolved Dx</figcaption></figure>
+    <figure><img src="./outputs/part1_3_dogdy.png"><figcaption>DoG convolved Dy</figcaption></figure>
+    <figure><img src="./outputs/part1_3_doggradmag.png"><figcaption>Gradient mag (DoG)</figcaption></figure>
+    <figure><img src="./outputs/part1_3_dogedges.png"><figcaption>Edge map (threshold=0.1)</figcaption></figure>
+  </div>
 
-  <figure><img src="./task_2_1/task_2_1_statue_2_blurred_image.png"><figcaption>Statue blurred (2)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_2_high_frequencies_image.png"><figcaption>Statue high freq (2)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_2_sharpened_image.png"><figcaption>Statue sharpened (2)</figcaption></figure>
+  <!-- ====================== PART 2 ====================== -->
+  <h2>Part 2: Applications of Filtering</h2>
 
-  <figure><img src="./task_2_1/task_2_1_statue_5_blurred_image.png"><figcaption>Statue blurred (5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_5_high_frequencies_image.png"><figcaption>Statue high freq (5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_statue_5_sharpened_image.png"><figcaption>Statue sharpened (5)</figcaption></figure>
-</div>
+  <!-- Task 2.1 -->
+  <h3>Part 2.1: Image Sharpening</h3>
+  <div class="matrix matrix-5">
+    <figure><img src="./outputs/taj_original.png"><figcaption>Taj original</figcaption></figure>
+    <figure><img src="./outputs/taj_blurred.png"><figcaption>Blurred</figcaption></figure>
+    <figure><img src="./outputs/taj_high.png"><figcaption>High frequencies</figcaption></figure>
+    <figure><img src="./outputs/taj_sharp05.png"><figcaption>Sharpened (0.5)</figcaption></figure>
+    <figure><img src="./outputs/taj_sharp1.png"><figcaption>Sharpened (1)</figcaption></figure>
+    <figure><img src="./outputs/taj_sharp2.png"><figcaption>Sharpened (2)</figcaption></figure>
+  </div>
 
-<h3>Eiffel Tower</h3>
-<div class="matrix matrix-3">
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_0.5_blurred_image.png"><figcaption>Eiffel blurred (0.5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_0.5_high_frequencies_image.png"><figcaption>Eiffel high freq (0.5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_0.5_sharpened_image.png"><figcaption>Eiffel sharpened (0.5)</figcaption></figure>
+  <div class="matrix matrix-7">
+    <figure><img src="./outputs/statue_original.png"><figcaption>Statue original</figcaption></figure>
+    <figure><img src="./outputs/statue_blurred.png"><figcaption>Blurred</figcaption></figure>
+    <figure><img src="./outputs/statue_high.png"><figcaption>High frequencies</figcaption></figure>
+    <figure><img src="./outputs/statue_sharp05.png"><figcaption>Sharp (0.5)</figcaption></figure>
+    <figure><img src="./outputs/statue_sharp1.png"><figcaption>Sharp (1)</figcaption></figure>
+    <figure><img src="./outputs/statue_sharp2.png"><figcaption>Sharp (2)</figcaption></figure>
+    <figure><img src="./outputs/statue_sharp5.png"><figcaption>Sharp (5)</figcaption></figure>
+  </div>
 
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_1_blurred_image.png"><figcaption>Eiffel blurred (1)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_1_high_frequencies_image.png"><figcaption>Eiffel high freq (1)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_1_sharpened_image.png"><figcaption>Eiffel sharpened (1)</figcaption></figure>
+  <div class="matrix matrix-7">
+    <figure><img src="./outputs/eiffel_original.png"><figcaption>Eiffel original</figcaption></figure>
+    <figure><img src="./outputs/eiffel_blurred.png"><figcaption>Blurred</figcaption></figure>
+    <figure><img src="./outputs/eiffel_high.png"><figcaption>High frequencies</figcaption></figure>
+    <figure><img src="./outputs/eiffel_sharp05.png"><figcaption>Sharp (0.5)</figcaption></figure>
+    <figure><img src="./outputs/eiffel_sharp1.png"><figcaption>Sharp (1)</figcaption></figure>
+    <figure><img src="./outputs/eiffel_sharp2.png"><figcaption>Sharp (2)</figcaption></figure>
+    <figure><img src="./outputs/eiffel_sharp5.png"><figcaption>Sharp (5)</figcaption></figure>
+  </div>
 
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_2_blurred_image.png"><figcaption>Eiffel blurred (2)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_2_high_frequencies_image.png"><figcaption>Eiffel high freq (2)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_2_sharpened_image.png"><figcaption>Eiffel sharpened (2)</figcaption></figure>
+  <!-- Task 2.2 -->
+  <h3>Part 2.2: Hybrid Images</h3>
+  <div class="flex-center">
+    <figure><img src="./outputs/derek.png"><figcaption>Derek</figcaption></figure>
+    <figure><img src="./outputs/nutmeg.png"><figcaption>Nutmeg</figcaption></figure>
+    <figure><img src="./outputs/hybrid.png"><figcaption>Hybrid</figcaption></figure>
+  </div>
 
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_5_blurred_image.png"><figcaption>Eiffel blurred (5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_5_high_frequencies_image.png"><figcaption>Eiffel high freq (5)</figcaption></figure>
-  <figure><img src="./task_2_1/task_2_1_eiffel_tower_5_sharpened_image.png"><figcaption>Eiffel sharpened (5)</figcaption></figure>
-</div>
+  <div class="flex-center">
+    <figure><img src="./outputs/derek_aligned.png"><figcaption>Derek aligned</figcaption></figure>
+    <figure><img src="./outputs/nutmeg_aligned.png"><figcaption>Nutmeg aligned</figcaption></figure>
+  </div>
 
-<!-- Task 2.2 -->
-<h2>Task 2.2: Hybrid Images</h2>
+  <div class="flex-center">
+    <figure><img src="./outputs/derek_low.png"><figcaption>Derek low frequencies</figcaption></figure>
+    <figure><img src="./outputs/nutmeg_high.png"><figcaption>Nutmeg high frequencies</figcaption></figure>
+  </div>
 
-<h3>Derek & Nutmeg</h3>
-<div class="matrix matrix-3">
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_im1.png"><figcaption>Derek im1</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_im2.png"><figcaption>Nutmeg im2</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_low_frequencies_im1.png"><figcaption>Derek low freq</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_high_frequencies_im2.png"><figcaption>Nutmeg high freq</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_im1_aligned.png"><figcaption>Derek aligned</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_im2_aligned.png"><figcaption>Nutmeg aligned</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_hybrid_image.png"><figcaption>Hybrid</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_low_image_1.png"><figcaption>FFT low im1</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_high_image_2.png"><figcaption>FFT high im2</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_hybrid.png"><figcaption>FFT hybrid</figcaption></figure>
-</div>
+  <div class="matrix matrix-7">
+    <figure><img src="./outputs/derek_fft.png"><figcaption>Derek FFT</figcaption></figure>
+    <figure><img src="./outputs/nutmeg_fft.png"><figcaption>Nutmeg FFT</figcaption></figure>
+    <figure><img src="./outputs/derek_aligned_fft.png"><figcaption>Derek aligned FFT</figcaption></figure>
+    <figure><img src="./outputs/nutmeg_aligned_fft.png"><figcaption>Nutmeg aligned FFT</figcaption></figure>
+    <figure><img src="./outputs/derek_low_fft.png"><figcaption>Derek low FFT</figcaption></figure>
+    <figure><img src="./outputs/nutmeg_high_fft.png"><figcaption>Nutmeg high FFT</figcaption></figure>
+    <figure><img src="./outputs/hybrid_fft.png"><figcaption>Hybrid FFT</figcaption></figure>
+  </div>
 
-<h3>Alligator & Snake</h3>
-<div class="matrix matrix-3">
-  <figure><img src="./task_2_2/task_2_2_alligator_snake_im1_aligned.png"><figcaption>Alligator aligned</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_alligator_snake_im2_aligned.png"><figcaption>Snake aligned</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_alligator_snake_low_frequencies_im1.png"><figcaption>Alligator low freq</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_alligator_snake_high_frequencies_im2.png"><figcaption>Snake high freq</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_alligator_snake_hybrid_image.png"><figcaption>Hybrid</figcaption></figure>
-</div>
+  <div class="flex-center">
+    <figure><img src="./outputs/tiger.png"><figcaption>Tiger</figcaption></figure>
+    <figure><img src="./outputs/monkey.png"><figcaption>Monkey</figcaption></figure>
+    <figure><img src="./outputs/hybrid_tiger_monkey.png"><figcaption>Hybrid</figcaption></figure>
+  </div>
 
-<h3>Tiger & Monkey</h3>
-<div class="matrix matrix-3">
-  <figure><img src="./task_2_2/task_2_2_tiger_monkey_im1_aligned.png"><figcaption>Tiger aligned</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_tiger_monkey_im2_aligned.png"><figcaption>Monkey aligned</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_tiger_monkey_low_frequencies_im1.png"><figcaption>Tiger low freq</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_tiger_monkey_high_frequencies_im2.png"><figcaption>Monkey high freq</figcaption></figure>
-  <figure><img src="./task_2_2/task_2_2_tiger_monkey_hybrid_image.png"><figcaption>Hybrid</figcaption></figure>
-</div>
+  <div class="flex-center">
+    <figure><img src="./outputs/alligator.png"><figcaption>Alligator</figcaption></figure>
+    <figure><img src="./outputs/snake.png"><figcaption>Snake</figcaption></figure>
+    <figure><img src="./outputs/hybrid_alligator_snake.png"><figcaption>Hybrid</figcaption></figure>
+  </div>
+
+  <!-- Task 2.3 -->
+  <h3>Part 2.3: Gaussian and Laplacian Stacks</h3>
+  <div class="matrix matrix-4">
+    <figure><img src="./outputs/apple_gaussian0.png"><figcaption>Apple G0</figcaption></figure>
+    <figure><img src="./outputs/apple_gaussian1.png"><figcaption>Apple G1</figcaption></figure>
+    <figure><img src="./outputs/apple_gaussian2.png"><figcaption>Apple G2</figcaption></figure>
+    <figure><img src="./outputs/apple_gaussian3.png"><figcaption>Apple G3</figcaption></figure>
+    <figure><img src="./outputs/apple_gaussian4.png"><figcaption>Apple G4</figcaption></figure>
+
+    <figure><img src="./outputs/orange_gaussian0.png"><figcaption>Orange G0</figcaption></figure>
+    <figure><img src="./outputs/orange_gaussian1.png"><figcaption>Orange G1</figcaption></figure>
+    <figure><img src="./outputs/orange_gaussian2.png"><figcaption>Orange G2</figcaption></figure>
+    <figure><img src="./outputs/orange_gaussian3.png"><figcaption>Orange G3</figcaption></figure>
+    <figure><img src="./outputs/orange_gaussian4.png"><figcaption>Orange G4</figcaption></figure>
+
+    <figure><img src="./outputs/apple_laplacian0.png"><figcaption>Apple L0</figcaption></figure>
+    <figure><img src="./outputs/apple_laplacian1.png"><figcaption>Apple L1</figcaption></figure>
+    <figure><img src="./outputs/apple_laplacian2.png"><figcaption>Apple L2</figcaption></figure>
+    <figure><img src="./outputs/apple_laplacian3.png"><figcaption>Apple L3</figcaption></figure>
+    <figure><img src="./outputs/apple_laplacian4.png"><figcaption>Apple L4</figcaption></figure>
+
+    <figure><img src="./outputs/orange_laplacian0.png"><figcaption>Orange L0</figcaption></figure>
+    <figure><img src="./outputs/orange_laplacian1.png"><figcaption>Orange L1</figcaption></figure>
+    <figure><img src="./outputs/orange_laplacian2.png"><figcaption>Orange L2</figcaption></figure>
+    <figure><img src="./outputs/orange_laplacian3.png"><figcaption>Orange L3</figcaption></figure>
+    <figure><img src="./outputs/orange_laplacian4.png"><figcaption>Orange L4</figcaption></figure>
+  </div>
+
+  <!-- Task 2.4 -->
+  <h3>Part 2.4: Multiresolution Blending (Oraple)</h3>
+  <div class="matrix matrix-3">
+    <figure><img src="./outputs/apple_lap0.png"><figcaption>Apple L0</figcaption></figure>
+    <figure><img src="./outputs/orange_lap0.png"><figcaption>Orange L0</figcaption></figure>
+    <figure><img src="./outputs/blend0.png"><figcaption>Blend L0</figcaption></figure>
+
+    <figure><img src="./outputs/apple_lap2.png"><figcaption>Apple L2</figcaption></figure>
+    <figure><img src="./outputs/orange_lap2.png"><figcaption>Orange L2</figcaption></figure>
+    <figure><img src="./outputs/blend2.png"><figcaption>Blend L2</figcaption></figure>
+
+    <figure><img src="./outputs/apple_lap4.png"><figcaption>Apple L4</figcaption></figure>
+    <figure><img src="./outputs/orange_lap4.png"><figcaption>Orange L4</figcaption></figure>
+    <figure><img src="./outputs/blend4.png"><figcaption>Blend L4</figcaption></figure>
+
+    <figure><img src="./outputs/apple_final.png"><figcaption>Apple Lap stack</figcaption></figure>
+    <figure><img src="./outputs/orange_final.png"><figcaption>Orange Lap stack</figcaption></figure>
+    <figure><img src="./outputs/blended_final.png"><figcaption>Final blend</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure><img src="./outputs/green_notebook.png"><figcaption>Green notebook</figcaption></figure>
+    <figure><img src="./outputs/blue_notebook.png"><figcaption>Blue notebook</figcaption></figure>
+    <figure><img src="./outputs/blended_notebooks.png"><figcaption>Blended notebooks</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure><img src="./outputs/custom1.png"><figcaption>Custom 1</figcaption></figure>
+    <figure><img src="./outputs/custom2.png"><figcaption>Custom 2</figcaption></figure>
+    <figure><img src="./outputs/custom3.png"><figcaption>Custom 3</figcaption></figure>
+  </div>
 
 </body>
 </html>
