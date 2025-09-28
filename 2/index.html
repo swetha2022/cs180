@@ -68,20 +68,25 @@
   <!-- Task 1.1 -->
   <h3>Part 1.1: Convolutions from Scratch!</h3>
   <p>
-    I implemented convolution using four nested loops, then optimized to two loops using NumPy slicing. Padding was implemented with zeros. I compared the results to <code>scipy.signal.convolve2d</code>. Below are comparisons for my portrait:
+    In part 1.1, I implemented 2D convolution on an image of myself using three approaches: a four-loop version, a two-loop version with vectorized inner operations, and the built-in <code>scipy.signal.convolve2d</code>. In the four-loop method, I explicitly loop over each pixel of the image and each element of the filter to compute the weighted sum. The two-loop version is faster because the inner loops over the filter are replaced with <em>vectorized</em> operations using NumPy, meaning that entire slices of the image and filter are multiplied and summed at once without explicit Python loops. For small kernels, performance differences between the two-loop and four-loop methods are minor, but as kernel size increases, vectorized and optimized implementations become much more efficient. The built-in function is highly optimized and significantly faster, especially for larger images or kernels. All methods handle boundaries using zero padding to ensure the output image maintains the same size as the input. Using these methods, I convolved the image of myself with a 9×9 box filter as well as finite difference operators <code>Dx</code> and <code>Dy</code>, which capture vertical and horizontal edges, respectively.
   </p>
+
+  <div class="flex-center">
+    <figure><img src="./task_1_1/4_loops_code.png"><figcaption>Convolution Code (4 loops)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure><img src="./task_1_1/2_loops_code.png"><figcaption>Convolution Code (2 loops)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure><img src="./task_1_1/built_in_code.png"><figcaption>Convolution Code (built-in)</figcaption></figure>
+  </div>
 
   <div class="flex-center">
     <figure><img src="./task_1_1/swetha.jpg"><figcaption>Original</figcaption></figure>
   </div>
 
-
-  <div class="flex-center">
-    <figure><img src="./task_1_1/4_loops_code.png"><figcaption>Convolution Code (4 loops)</figcaption></figure>
-    <figure><img src="./task_1_1/2_loops_code.png"><figcaption>Convolution Code (2 loops)</figcaption></figure>
-    <figure><img src="./task_1_1/built_in_code.png"><figcaption>Convolution Code (built-in)</figcaption></figure>
-  </div>
-  
   <div class="flex-center">
     <figure><img src="./task_1_1/task_1_1_convolved_4_loops_box.png"><figcaption>Box Filter (4 loops)<br>Time Taken: 9.89s</figcaption></figure>
     <figure><img src="./task_1_1/task_1_1_convolved_2_loops_box.png"><figcaption>Box Filter (2 loops)<br>Time Taken: 1.21s</figcaption></figure>
@@ -102,6 +107,9 @@
 
   <!-- Task 1.2 -->
   <h3>Part 1.2: Finite Difference Operator</h3>
+  <p>
+    In part 1.2, I focused on the cameraman image. Below are images representing the partial derivatives in the x and y directions, the gradient magnitude image, and a binarized edge image. I used a threshold of 0.3 to create the binarized edge image, chosen qualitatively to balance edge detection and noise removal. Increasing the threshold reduces noise but also removes parts of the cameraman's edges, while decreasing the threshold preserves more edges but allows more background noise. A threshold of 0.3 provided the best compromise between capturing the cameraman's edges and minimizing noise from the background.
+  </p>
   <div class="flex-center">
     <figure><img src="./task_1_2/cameraman.png"><figcaption>Cameraman Original</figcaption></figure>
     <figure><img src="./task_1_2/task_1_2_convolved_dx.png"><figcaption>Convolved Dx</figcaption></figure>
@@ -115,6 +123,9 @@
 
   <!-- Task 1.3 -->
   <h3>Part 1.3: Derivative of Gaussian (DoG)</h3>
+  <p>
+    In part 1.3, I constructed a Gaussian filter using <code>cv2.getGaussianKernel</code> and built a 2D kernel by taking the outer product of the 1D Gaussian kernel with its transpose. Applying this filter to the original grayscale image produced a blurred version, after which I computed the partial derivatives in x and y, the gradient magnitude image, and a binarized edge image. Compared to the finite difference method, the edge map is much smoother and less noisy. I used a threshold of 0.1, chosen qualitatively to balance edge detection and noise suppression. I also implemented derivative-of-Gaussian (DoG) filters by convolving the Gaussian filter with the Dx and Dy filters, and then applied these DoG filters directly to the grayscale image to compute the partial derivatives, gradient magnitude, and binarized edge image. This produced results consistent with the previous Gaussian-smoothing approach. Overall, while the simple difference operator yields noisy edges, combining it with Gaussian smoothing or using DoG filters provides cleaner and smoother edge maps.
+  </p>
   <div class="flex-center">
     <figure><img src="./task_1_3/cameraman.png"><figcaption>Original</figcaption></figure>
     <figure><img src="./task_1_3/task_1_3_gaussian_filter.png"><figcaption>Gaussian Filter</figcaption></figure>
@@ -135,6 +146,9 @@
 
   <!-- ====================== PART 2 ====================== -->
   <h2>Part 2: Applications of Filtering</h2>
+  <p>
+    In part 2.1, I sharpened a blurry image of the Taj Mahal using the unsharp mask technique. This method works by first creating a blurred version of the original image using a Gaussian filter, which acts as a low-pass filter and retains only the low-frequency components. Subtracting the blurred image from the original isolates the high-frequency components, which correspond to edges and fine details. By adding a scaled version of these high frequencies back to the original image, we enhance the sharpness. Mathematically, this can be expressed as applying the filter <code>(1 + alpha) * unit_impulse - alpha * gaussian_filter</code>, where <code>alpha</code> controls the sharpening amount. Higher values of <code>alpha</code> amplify the high-frequency components more strongly, resulting in a sharper image, while smaller values preserve more of the original blur. I applied this technique to a blurred Taj Mahal, as well as to images of the Statue of Liberty and Eiffel Tower by first blurring the original images and then applying unsharp masking. Increasing <code>alpha</code> consistently improved the approximation of the original image’s high-frequency content, producing sharper results.
+  </p>
 
   <!-- Task 2.1 -->
   <h3>Part 2.1: Image Sharpening</h3>
@@ -178,13 +192,15 @@
 
   <!-- Task 2.2 -->
   <h3>Part 2.2: Hybrid Images</h3>
+  <p>
+    In part 2.2, I created hybrid images by combining two input images in the frequency domain. First, I aligned the two images, then extracted a low-frequency version of the first image and a high-frequency version of the second image. Adding these together produced the final hybrid image. I demonstrated this process in detail on the Derek and Nutmeg images, showing the aligned images, the filtered results, and the final hybrid image, along with the Fourier transforms of all these images. The Fourier transforms were visualized using <code>np.log(np.abs(np.fft.fftshift(np.fft.fft2(gray_image))))</code>. Additionally, I applied the same procedure to a tiger and monkey pair and an alligator and snake pair, showing the original images and their final hybrid results. For all the image pairs below, I used a Gaussian filter with <code>sigma = 8</code> to extract the low-frequency components from the first image, and a Gaussian filter with <code>sigma = 15</code> to extract the high-frequency components from the second image. These values were chosen qualitatively to balance the contribution of low and high frequencies in the final hybrid images, ensuring that the hybrid effect is visually clear without excessive blurring or noise.
+  </p> 
+
   <div class="flex-center">
     <figure><img src="./task_2_2/DerekPicture.jpg"><figcaption>Derek Original</figcaption></figure>
     <figure><img src="./task_2_2/nutmeg.jpg"><figcaption>Nutmeg Original</figcaption></figure>
     <figure><img src="./task_2_2/task_2_2_derek_nutmeg_hybrid_image.png"><figcaption>Hybrid</figcaption></figure>
   </div>
-
-  Below are images showing the full process:
 
   <div class="flex-center">
     <figure><img src="./task_2_2/task_2_2_derek_nutmeg_im1_aligned.png"><figcaption>Derek Aligned</figcaption></figure>
@@ -198,8 +214,8 @@
     <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_im2.png"><figcaption>Nutmeg FFT</figcaption></figure>
     <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_aligned_im1.png"><figcaption>Derek Aligned FFT</figcaption></figure>
     <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_aligned_im2.png"><figcaption>Nutmeg Aligned FFT</figcaption></figure>
-    <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_low_image_1.png"><figcaption>Derek Low FFT</figcaption></figure>
-    <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_high_image_2.png"><figcaption>Nutmeg High FFT</figcaption></figure>
+    <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_low_image_1.png"><figcaption>Derek Low Frequencies FFT</figcaption></figure>
+    <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_high_image_2.png"><figcaption>Nutmeg High Frequencies FFT</figcaption></figure>
     <figure><img src="./task_2_2/task_2_2_derek_nutmeg_fft_hybrid.png"><figcaption>Hybrid FFT</figcaption></figure>
   </div>  
 
@@ -217,6 +233,9 @@
 
   <!-- Task 2.3 -->
   <h3>Part 2.3: Gaussian and Laplacian Stacks</h3>
+  <p>
+    In part 2.3, I created Gaussian and Laplacian stacks for the apple and orange images, implemented over 5 levels. The Gaussian stacks were built by repeatedly applying a Gaussian filter to the previous level, starting with the original image at the first level. The Laplacian stacks were obtained by taking the difference between consecutive levels of the Gaussian stack, with the last level of the Laplacian stack equal to the last level of the Gaussian stack. The visuals of the Gaussian and Laplacian stacks for the two images are demonstrated below.
+  </p>
 
   <!-- Level 0 -->
   <div class="flex-center">
@@ -260,6 +279,10 @@
 
   <!-- Task 2.4 -->
   <h3>Part 2.4: Multiresolution Blending (Oraple)</h3>
+  <p>
+    In part 2.4, I used the Laplacian stacks from the previous part to implement multi-resolution blending for the apple and orange images. At each level, the Laplacian for the apple was multiplied by the seam, and the Laplacian for the orange was multiplied by <code>1 - seam</code>. The weighted contributions were then combined to produce the blended result at that level. The weighted Laplacians for the apple and orange, along with their combined blend, are shown for levels 0, 2, and 4. The sum of weighted Laplacians for the apple and orange across all levels and the final blended image are shown in the last row. I applied the same procedure to a blue and green notebook pair using a horizontal seam, and to a hand and eye pair using a circular seam, demonstrating that multi-resolution blending can effectively handle a variety of seam shapes.
+  </p>
+
   <div class="flex-center">
     <figure><img src="./task_2_3_and_2_4/task_2_3_and_2_4_weighted_img1_level_0.png"></figure>
     <figure><img src="./task_2_3_and_2_4/task_2_3_and_2_4_weighted_img2_level_0.png"></figure>
