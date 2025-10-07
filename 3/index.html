@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project 3: Image Warping and Mosaicing</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      margin: 30px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      text-align: center;
+    }
+    .flex-center {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end; 
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    figure {
+      margin: 0;
+      width: 20%;
+    }
+    figure img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    }
+    figcaption {
+      font-size: 13px;
+      text-align: center;
+      margin-top: 6px;
+    }
+    p {
+      text-align: justify;
+    }
+    code {
+      background: #eee;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .matrix {
+      display: grid;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .matrix-3 { grid-template-columns: repeat(3, 1fr); }
+    .matrix-4 { grid-template-columns: repeat(4, 1fr); }
+    .matrix-5 { grid-template-columns: repeat(5, 1fr); }
+  </style>
+</head>
+<body>
+  <h1>Project 3: Image Warping and Mosaicing</h1>
+  <h3>Webpage Link: <a href="https://swetha2022.github.io/cs180/3/index.html">https://swetha2022.github.io/cs180/3/index.html</a></h3>
+
+  <h2>Introduction</h2>
+  <p>
+    In this project, I explored the mathematics and implementation of projective transformations and image warping to create seamless image mosaics. The process involved capturing overlapping photographs, computing homographies from point correspondences, performing inverse warping with nearest neighbor and bilinear interpolation, and blending warped images into panoramas. This project highlights key geometric computer vision techniques, including homography estimation, coordinate transformation, and resampling.
+  </p>
+
+  <!-- ====================== PART A.1 ====================== -->
+  <h2>A.1: Shoot and Digitize Pictures (20 pts)</h2>
+  <p>
+    For this part, I captured multiple sets of images by rotating the camera around a fixed center of projection. Each pair of images has a significant overlap (around 50–60%) to ensure successful registration. I avoided fisheye lenses and took photos under consistent lighting conditions to minimize exposure variation. Below are two sets of photographs demonstrating projective transformations between them.
+  </p>
+
+  <div class="flex-center">
+    <figure><img src="./A1/set1_img1.jpg"><figcaption>Set 1 – Image 1</figcaption></figure>
+    <figure><img src="./A1/set1_img2.jpg"><figcaption>Set 1 – Image 2</figcaption></figure>
+  </div>
+  <div class="flex-center">
+    <figure><img src="./A1/set2_img1.jpg"><figcaption>Set 2 – Image 1</figcaption></figure>
+    <figure><img src="./A1/set2_img2.jpg"><figcaption>Set 2 – Image 2</figcaption></figure>
+  </div>
+
+  <p>
+    <b>Deliverables:</b> At least two sets of images showing projective transformations (fixed COP, rotated camera).
+  </p>
+
+  <!-- ====================== PART A.2 ====================== -->
+  <h2>A.2: Recover Homographies (20 pts)</h2>
+  <p>
+    To align the images, I computed the 3×3 homography matrix <code>H</code> that maps points from one image to another using corresponding point pairs. Given correspondences <code>p' = Hp</code>, the homography is estimated using least-squares from an overdetermined system of equations <code>Ah = b</code>. I implemented:
+  </p>
+  <pre><code>H = computeH(im1_pts, im2_pts)</code></pre>
+
+  <p>
+    Below are visualizations of manually selected correspondences, the constructed system of equations, and the resulting homography matrices.
+  </p>
+
+  <div class="flex-center">
+    <figure><img src="./A2/im1_pts_visualization.jpg"><figcaption>Correspondences on Image 1</figcaption></figure>
+    <figure><img src="./A2/im2_pts_visualization.jpg"><figcaption>Correspondences on Image 2</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure><img src="./A2/system_equations.png"><figcaption>Linear System A and b</figcaption></figure>
+    <figure><img src="./A2/homography_matrix.png"><figcaption>Recovered Homography H</figcaption></figure>
+  </div>
+
+  <p>
+    <b>Deliverables:</b> Implement <code>computeH(im1_pts, im2_pts)</code>, visualize correspondences, show equations, and display recovered <code>H</code>.
+  </p>
+
+  <!-- ====================== PART A.3 ====================== -->
+  <h2>A.3: Warp the Images (20 pts)</h2>
+  <p>
+    Using the recovered homography, I warped each image toward a reference image using inverse warping to avoid holes. I implemented two interpolation methods:
+  </p>
+  <ul>
+    <li><b>Nearest Neighbor Interpolation:</b> Round the mapped coordinates to the nearest pixel.</li>
+    <li><b>Bilinear Interpolation:</b> Compute a weighted average of the four nearest pixels for smoother results.</li>
+  </ul>
+
+  <pre><code>
+imwarped_nn = warpImageNearestNeighbor(im, H)
+imwarped_bil = warpImageBilinear(im, H)
+  </code></pre>
+
+  <p>
+    Below are results comparing both interpolation methods and examples of image rectification, where planar objects such as posters or paintings were made fronto-parallel.
+  </p>
+
+  <div class="flex-center">
+    <figure><img src="./A3/warped_nn.jpg"><figcaption>Warped Image (Nearest Neighbor)</figcaption></figure>
+    <figure><img src="./A3/warped_bilinear.jpg"><figcaption>Warped Image (Bilinear)</figcaption></figure>
+  </div>
+
+  <p><b>Interpolation Comparison:</b></p>
+  <ul>
+    <li>Nearest neighbor is faster but produces jagged edges and aliasing.</li>
+    <li>Bilinear interpolation is slower but produces smoother, higher-quality warps.</li>
+  </ul>
+
+  <h3>Rectification Examples</h3>
+  <div class="flex-center">
+    <figure><img src="./A3/rectification_original.jpg"><figcaption>Original Image</figcaption></figure>
+    <figure><img src="./A3/rectification_result.jpg"><figcaption>Rectified Result</figcaption></figure>
+  </div>
+
+  <p>
+    <b>Deliverables:</b> Implement <code>warpImageNearestNeighbor</code> and <code>warpImageBilinear</code> using inverse warping. Show at least two rectified images and compare interpolation quality.
+  </p>
+
+  <!-- ====================== PART A.4 ====================== -->
+  <h2>A.4: Blend the Images into a Mosaic (20 pts)</h2>
+  <p>
+    With all images warped into alignment, I blended them to form mosaics. To minimize visible seams, I used weighted averaging (feathering) via alpha blending, assigning higher weights near image centers and lower near edges. For each mosaic, one image was fixed as the reference, and the others were warped into its coordinate system.
+  </p>
+
+  <div class="flex-center">
+    <figure><img src="./A4/source1.jpg"><figcaption>Source Image 1</figcaption></figure>
+    <figure><img src="./A4/source2.jpg"><figcaption>Source Image 2</figcaption></figure>
+    <figure><img src="./A4/mosaic_result.jpg"><figcaption>Final Mosaic</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure><img src="./A4/mosaic2_source1.jpg"><figcaption>Source 1 (Mosaic 2)</figcaption></figure>
+    <figure><img src="./A4/mosaic2_source2.jpg"><figcaption>Source 2 (Mosaic 2)</figcaption></figure>
+    <figure><img src="./A4/mosaic2_result.jpg"><figcaption>Mosaic 2 Result</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure><img src="./A4/mosaic3_source1.jpg"><figcaption>Source 1 (Mosaic 3)</figcaption></figure>
+    <figure><img src="./A4/mosaic3_source2.jpg"><figcaption>Source 2 (Mosaic 3)</figcaption></figure>
+    <figure><img src="./A4/mosaic3_result.jpg"><figcaption>Mosaic 3 Result</figcaption></figure>
+  </div>
+
+  <p>
+    <b>Deliverables:</b> Show at least three mosaics with source images and results. Use weighted averaging or blending to reduce seams and explain your procedure.
+  </p>
+
+  <!-- ====================== CONCLUSION ====================== -->
+  <h2>Conclusion</h2>
+  <p>
+    Through this project, I implemented core components of image mosaicing, including homography estimation, inverse warping, and blending. The pipeline demonstrates how projective geometry can be used to align and merge multiple images into a unified panorama. Bilinear interpolation yielded smoother results, while alpha blending effectively minimized seams between overlapping regions. This project provided hands-on experience with geometric computer vision concepts that are foundational to applications like panorama stitching, augmented reality, and 3D reconstruction.
+  </p>
+
+</body>
+</html>
