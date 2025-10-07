@@ -56,9 +56,10 @@
   <!-- ====================== PART A.1 ====================== -->
   <h2>A.1: Shoot the Pictures</h2>
   <p>
-    Below are two sets of images that I captured by rotating the camera around a fixed center of projection:
+    Below are two sets of images that I captured by rotating the camera around a fixed center of projection.
   </p>
 
+  <h3>Captured Photographs:</h3>
   <div class="flex-center">
     <figure><img src="./A1/set1_img1.jpg"><figcaption>Set 1: Image 1</figcaption></figure>
     <figure><img src="./A1/set1_img2.jpg"><figcaption>Set 1: Image 2</figcaption></figure>
@@ -76,6 +77,7 @@
     To align the images, I computed the homography matrix <code>H</code> that maps points from one image to another. Given correspondences <code>p' = Hp</code>, the homography is estimated using least-squares from an overdetermined system of equations <code>Ah = b</code>. Below are visualizations of manually selected correspondences on two sets of images, the constructed systems of equations, and the resulting homography matrices.
   </p>
 
+  <h3>Homography Estimation Results:</h3>
   <div class="flex-center">
     <figure><img src="./A2/im1_pts_visualization1.jpg"><figcaption>Set 1: Image 1 Correspondences</figcaption></figure>
     <figure><img src="./A2/im2_pts_visualization1.jpg"><figcaption>Set 1: Image 2 Correspondences</figcaption></figure>
@@ -97,7 +99,7 @@
     I implemented image warping using homographies and explored two interpolation methods: <b>nearest neighbor</b> and <b>bilinear interpolation</b>. Nearest neighbor interpolation rounds mapped coordinates to the nearest pixel value, while bilinear interpolation uses a weighted average of the four neighboring pixels for smoother results. Below are results demonstrating image rectification and a comparison between the two interpolation methods. Nearest neighbor interpolation is faster but produces jagged edges and aliasing, whereas bilinear interpolation is slower but yields smoother, higher-quality warps.
   </p>
 
-  <h3>Rectification Examples:</h3>
+  <h3>Rectification Results:</h3>
   <div class="flex-center">
     <figure><img src="./A3/rectification_original1.jpg"><figcaption>Original Image</figcaption></figure>
     <figure><img src="./A3/rectification_result1_nn.jpg"><figcaption>Rectified Result (Nearest Neighbor)</figcaption></figure>
@@ -117,7 +119,7 @@
     With all images warped into alignment, I blended them to form mosaics. To minimize visible seams, I used weighted averaging. For each mosaic, one image was fixed as the reference, and the others were warped into its coordinate system.
   </p>
 
-  <h3>Mosaic Examples:</h3>
+  <h3>Mosaic Results:</h3>
   <div class="flex-center">
     <figure><img src="./A4/mosaic1_source1.jpg"><figcaption>Source 1 (Mosaic 1)</figcaption></figure>
     <figure><img src="./A4/mosaic1_source2.jpg"><figcaption>Source 2 (Mosaic 1)</figcaption></figure>
