@@ -126,7 +126,7 @@
   <!-- ====================== PART A.4 ====================== -->
   <h2>A.4: Blend the Images into a Mosaic</h2>
   <p>
-    With all images warped into alignment, I blended them to form mosaics. To minimize visible seams, I used weighted averaging w. For each mosaic, one image was fixed as the reference, and the other was warped into its coordinate system.
+    Finally, I created mosaics from the photographs I took using homographies, interpolation, and alpha blending. I used alpha blending to minimize visible seams and “ghosting” artifacts. For each mosaic, one image was chosen as the reference, and the other image was transformed into its coordinate system using warping with bilinear interpolation. To accommodate both images in a single output, I first computed the bounding box of all corner points after transformation to determine the size of the final mosaic canvas. This ensured that both images fit entirely within the canvas. Once both images were placed onto the mosaic canvas, I generated alpha masks for each image using a distance-based approach: the mask was strongest (value 1) near the center of the image and fell off smoothly to 0 at the edges. These alpha masks were then used to perform weighted averaging at each pixel, blending overlapping regions according to their relative alpha values. Pixels near the center of an image contributed more heavily, while edge pixels were faded out to reduce visible seams. This procedure allowed both images to merge naturally on the canvas, producing a single coherent mosaic with smooth transitions and minimal artifacts.
   </p>
 
   <h3>Mosaic Results:</h3>
