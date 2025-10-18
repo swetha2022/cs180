@@ -154,5 +154,72 @@
     <figure><img src="apt_mosaic.jpg"><figcaption>Mosaic 3 Result</figcaption></figure>
   </div>
 
+  <!-- ====================== PART B.1 ====================== -->
+<h2>B.1: Harris Corner Detection</h2>
+<p>
+  In this section, I implemented the Harris Interest Point Detector to identify keypoints in the image. I also performed Adaptive Non-Maximal Suppression (ANMS) to select spatially well-distributed corners. Below are visualizations showing corners before and after ANMS.
+</p>
+
+<h3>Deliverables:</h3>
+<ul>
+  <li>Detected Harris corners overlaid on image.</li>
+  <li>Detected corners after applying ANMS.</li>
+</ul>
+
+<div class="flex-center">
+  <figure><img src="harris_corners.png"><figcaption>Detected Harris Corners</figcaption></figure>
+  <figure><img src="anms_corners.png"><figcaption>Corners After ANMS</figcaption></figure>
+</div>
+
+<!-- ====================== PART B.2 ====================== -->
+<h2>B.2: Feature Descriptor Extraction</h2>
+<p>
+  I extracted 8×8 normalized feature descriptors for each interest point by sampling from a larger 40×40 window. Each patch was bias/gain-normalized for illumination invariance. Below are several example patches visualized.
+</p>
+
+<h3>Deliverables:</h3>
+<ul>
+  <li>Extracted 8×8 normalized feature descriptors.</li>
+  <li>Show several extracted feature patches.</li>
+</ul>
+
+<div class="flex-center">
+  <figure><img src="feature_patch_examples.png"><figcaption>Sample Extracted Feature Patches</figcaption></figure>
+</div>
+
+<!-- ====================== PART B.3 ====================== -->
+<h2>B.3: Feature Matching</h2>
+<p>
+  I matched features between image pairs using the ratio test described by Lowe. Matches were accepted if the ratio between the first and second nearest neighbor distances was below a threshold (typically 0.7). Below are visualizations showing matched features with lines drawn between corresponding keypoints.
+</p>
+
+<h3>Deliverables:</h3>
+<ul>
+  <li>Show matched features between image pairs.</li>
+</ul>
+
+<div class="flex-center">
+  <figure><img src="matched_features1.png"><figcaption>Matched Features (Set 1)</figcaption></figure>
+  <figure><img src="matched_features2.png"><figcaption>Matched Features (Set 2)</figcaption></figure>
+</div>
+
+<!-- ====================== PART B.4 ====================== -->
+<h2>B.4: RANSAC for Robust Homography</h2>
+<p>
+  Using a 4-point RANSAC approach, I estimated robust homographies that reject outlier correspondences. I then generated automatic mosaics using these homographies and compared them with manually aligned results.
+</p>
+
+<h3>Deliverables:</h3>
+<ul>
+  <li>Implement 4-point RANSAC for homography estimation.</li>
+  <li>Compare manually vs automatically stitched mosaics.</li>
+  <li>Show at least 3 automatically generated mosaics.</li>
+</ul>
+
+<div class="flex-center">
+  <figure><img src="manual_mosaic1.jpg"><figcaption>Manual Mosaic</figcaption></figure>
+  <figure><img src="auto_mosaic1.jpg"><figcaption>Automatic Mosaic (RANSAC)</figcaption></figure>
+</div>
+
 </body>
 </html>
