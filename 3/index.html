@@ -11,6 +11,7 @@
     h1, h2, h3 {
       text-align: center;
     }
+
     .flex-center {
       display: flex;
       justify-content: center;
@@ -19,23 +20,35 @@
       flex-wrap: wrap;
       margin: 20px 0;
     }
+
     figure {
       margin: 0;
-      width: 20%;
     }
+
+    figure.source {
+      width: 45%;
+    }
+
+    figure.mosaic {
+      width: 100%;
+    }
+
     figure img {
       width: 100%;
       border-radius: 8px;
       box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
     }
+
     figcaption {
       font-size: 13px;
       text-align: center;
       margin-top: 6px;
     }
+
     p {
       text-align: justify;
     }
+
     code {
       background: #eee;
       padding: 2px 5px;
@@ -62,23 +75,23 @@
   <h3>Captured Photographs:</h3>
 
   <div class="flex-center">
-    <figure><img src="outside1.jpg"><figcaption>Set 1: Image 1</figcaption></figure>
-    <figure><img src="outside2.jpg"><figcaption>Set 1: Image 2</figcaption></figure>
+    <figure class="source"><img src="outside1.jpg"><figcaption>Set 1: Image 1</figcaption></figure>
+    <figure class="source"><img src="outside2.jpg"><figcaption>Set 1: Image 2</figcaption></figure>
   </div>
 
   <div class="flex-center">
-    <figure><img src="hmmb1.jpg"><figcaption>Set 2: Image 1</figcaption></figure>
-    <figure><img src="hmmb2.jpg"><figcaption>Set 2: Image 2</figcaption></figure>
+    <figure class="source"><img src="hmmb1.jpg"><figcaption>Set 2: Image 1</figcaption></figure>
+    <figure class="source"><img src="hmmb2.jpg"><figcaption>Set 2: Image 2</figcaption></figure>
   </div>
 
   <div class="flex-center">
-    <figure><img src="books1.jpg"><figcaption>Set 3: Image 1</figcaption></figure>
-    <figure><img src="books2.jpg"><figcaption>Set 3: Image 2</figcaption></figure>
+    <figure class="source"><img src="books1.jpg"><figcaption>Set 3: Image 1</figcaption></figure>
+    <figure class="source"><img src="books2.jpg"><figcaption>Set 3: Image 2</figcaption></figure>
   </div>
 
   <div class="flex-center">
-    <figure><img src="apt1.png"><figcaption>Set 4: Image 1</figcaption></figure>
-    <figure><img src="apt2.png"><figcaption>Set 4: Image 2</figcaption></figure>
+    <figure class="source"><img src="apt1.png"><figcaption>Set 4: Image 1</figcaption></figure>
+    <figure class="source"><img src="apt2.png"><figcaption>Set 4: Image 2</figcaption></figure>
   </div>
 
   <!-- ====================== PART A.2 ====================== -->
@@ -89,19 +102,18 @@
 
   <h3>Homography Estimation Results:</h3>
   <div class="flex-center">
-    <figure><img src="outside_points1.png"><figcaption>Set 1: Image 1 Correspondences</figcaption></figure>
-    <figure><img src="outside_points2.png"><figcaption>Set 1: Image 2 Correspondences</figcaption></figure>
-    <figure><img src="system_of_equations.png"><figcaption>Set 1: Linear System of Equations</figcaption></figure>
-    <figure><img src="outside_H.png"><figcaption>Set 1: Recovered Homography H</figcaption></figure>
+    <figure class="source"><img src="outside_points1.png"><figcaption>Set 1: Image 1 Correspondences</figcaption></figure>
+    <figure class="source"><img src="outside_points2.png"><figcaption>Set 1: Image 2 Correspondences</figcaption></figure>
+    <figure class="source"><img src="system_of_equations.png"><figcaption>Set 1: Linear System of Equations</figcaption></figure>
+    <figure class="source"><img src="outside_H.png"><figcaption>Set 1: Recovered Homography H</figcaption></figure>
   </div>
 
   <div class="flex-center">
-    <figure><img src="apt_points1.png"><figcaption>Set 2: Image 1 Correspondences</figcaption></figure>
-    <figure><img src="apt_points2.png"><figcaption>Set 2: Image 2 Correspondences</figcaption></figure>
-    <figure><img src="system_of_equations.png"><figcaption>Set 2: Linear System of Equations</figcaption></figure>
-    <figure><img src="apt_H.png"><figcaption>Set 2: Recovered Homography H</figcaption></figure>
+    <figure class="source"><img src="apt_points1.png"><figcaption>Set 2: Image 1 Correspondences</figcaption></figure>
+    <figure class="source"><img src="apt_points2.png"><figcaption>Set 2: Image 2 Correspondences</figcaption></figure>
+    <figure class="source"><img src="system_of_equations.png"><figcaption>Set 2: Linear System of Equations</figcaption></figure>
+    <figure class="source"><img src="apt_H.png"><figcaption>Set 2: Recovered Homography H</figcaption></figure>
   </div>
-
 
   <!-- ====================== PART A.3 ====================== -->
   <h2>A.3: Warp the Images</h2>
@@ -111,16 +123,15 @@
 
   <h3>Rectification Results:</h3>
   <div class="flex-center">
-    <figure><img src="notebook.jpg"><figcaption>Original Image</figcaption></figure>
-    <figure><img src="notebook_rectified_nn.jpg"><figcaption>Rectified Result (Nearest Neighbor)</figcaption></figure>
-    <figure><img src="notebook_rectified_bilinear.jpg"><figcaption>Rectified Result (Bilinear)</figcaption></figure>
-
+    <figure class="source"><img src="notebook.jpg"><figcaption>Original Image</figcaption></figure>
+    <figure class="source"><img src="notebook_rectified_nn.jpg"><figcaption>Rectified Result (Nearest Neighbor)</figcaption></figure>
+    <figure class="source"><img src="notebook_rectified_bilinear.jpg"><figcaption>Rectified Result (Bilinear)</figcaption></figure>
   </div>
 
   <div class="flex-center">
-    <figure><img src="ipad.jpg"><figcaption>Original Image</figcaption></figure>
-    <figure><img src="ipad_rectified_nn.jpg"><figcaption>Rectified Result (Nearest Neighbor)</figcaption></figure>
-    <figure><img src="ipad_rectified_bilinear.jpg"><figcaption>Rectified Result (Bilinear)</figcaption></figure>
+    <figure class="source"><img src="ipad.jpg"><figcaption>Original Image</figcaption></figure>
+    <figure class="source"><img src="ipad_rectified_nn.jpg"><figcaption>Rectified Result (Nearest Neighbor)</figcaption></figure>
+    <figure class="source"><img src="ipad_rectified_bilinear.jpg"><figcaption>Rectified Result (Bilinear)</figcaption></figure>
   </div>
 
   <!-- ====================== PART A.4 ====================== -->
@@ -131,147 +142,154 @@
 
   <h3>Mosaic Results:</h3>
 
+  <!-- Mosaic 1 -->
   <h4>Mosaic 1:</h4>
   <div class="flex-center">
-    <figure><img src="outside1.jpg"><figcaption>Source 1</figcaption></figure>
-    <figure><img src="outside2.jpg"><figcaption>Source 2</figcaption></figure>
+    <figure class="source"><img src="outside1.jpg"><figcaption>Source 1</figcaption></figure>
+    <figure class="source"><img src="outside2.jpg"><figcaption>Source 2</figcaption></figure>
   </div>
   <div class="flex-center">
-    <figure><img src="outside_mosaic.jpg"><figcaption>Mosaic 1 Result</figcaption></figure>
+    <figure class="mosaic"><img src="outside_mosaic.jpg"><figcaption>Mosaic 1 Result (Manual)</figcaption></figure>
+    <figure class="mosaic"><img src="outside_mosaic_automatic.jpg"><figcaption>Mosaic 1 Result (Automatic)</figcaption></figure>
   </div>
 
+  <!-- Mosaic 2 -->
   <h4>Mosaic 2:</h4>
   <div class="flex-center">
-    <figure><img src="hmmb1.jpg"><figcaption>Source 1</figcaption></figure>
-    <figure><img src="hmmb2.jpg"><figcaption>Source 2</figcaption></figure>
+    <figure class="source"><img src="hmmb1.jpg"><figcaption>Source 1</figcaption></figure>
+    <figure class="source"><img src="hmmb2.jpg"><figcaption>Source 2</figcaption></figure>
   </div>
   <div class="flex-center">
-    <figure><img src="hmmb_mosaic.jpg"><figcaption>Mosaic 2 Result</figcaption></figure>
+    <figure class="mosaic"><img src="hmmb_mosaic.jpg"><figcaption>Mosaic 2 Result (Manual)</figcaption></figure>
+    <figure class="mosaic"><img src="hmmb_mosaic_automatic.jpg"><figcaption>Mosaic 2 Result (Automatic)</figcaption></figure>
   </div>
 
+  <!-- Mosaic 3 -->
   <h4>Mosaic 3:</h4>
   <div class="flex-center">
-    <figure><img src="books1.jpg"><figcaption>Source 1</figcaption></figure>
-    <figure><img src="books2.jpg"><figcaption>Source 2</figcaption></figure>
+    <figure class="source"><img src="books1.jpg"><figcaption>Source 1</figcaption></figure>
+    <figure class="source"><img src="books2.jpg"><figcaption>Source 2</figcaption></figure>
   </div>
   <div class="flex-center">
-    <figure><img src="books_mosaic.jpg"><figcaption>Mosaic 3 Result</figcaption></figure>
+    <figure class="mosaic"><img src="books_mosaic.jpg"><figcaption>Mosaic 3 Result (Manual)</figcaption></figure>
+    <figure class="mosaic"><img src="books_mosaic_automatic.jpg"><figcaption>Mosaic 3 Result (Automatic)</figcaption></figure>
   </div>
 
+  <!-- Mosaic 4 -->
   <h4>Mosaic 4:</h4>
   <div class="flex-center">
-    <figure><img src="apt1.png"><figcaption>Source 1</figcaption></figure>
-    <figure><img src="apt2.png"><figcaption>Source 2</figcaption></figure>
+    <figure class="source"><img src="apt1.png"><figcaption>Source 1</figcaption></figure>
+    <figure class="source"><img src="apt2.png"><figcaption>Source 2</figcaption></figure>
   </div>
   <div class="flex-center">
-    <figure><img src="apt_mosaic.jpg"><figcaption>Mosaic 4 Result</figcaption></figure>
+    <figure class="mosaic"><img src="apt_mosaic.jpg"><figcaption>Mosaic 4 Result (Manual)</figcaption></figure>
+    <figure class="mosaic"><img src="apt_mosaic_automatic.jpg"><figcaption>Mosaic 4 Result (Automatic)</figcaption></figure>
   </div>
-    
 
   <!-- ====================== PART B.1 ====================== -->
-<h2>B.1: Harris Corner Detection</h2>
-<p>
-  In this section, I implemented the Harris Interest Point Detector to identify keypoints in the image. I also performed Adaptive Non-Maximal Suppression (ANMS) to select spatially well-distributed corners. Below are visualizations showing corners before and after ANMS.
-</p>
+  <h2>B.1: Harris Corner Detection</h2>
+  <p>
+    In this section, I implemented the Harris Interest Point Detector to identify keypoints in the image. I also performed Adaptive Non-Maximal Suppression (ANMS) to select spatially well-distributed corners. Below are visualizations showing corners before and after ANMS.
+  </p>
 
-<h3>Deliverables:</h3>
-<ul>
-  <li>Detected Harris corners overlaid on image.</li>
-  <li>Detected corners after applying ANMS.</li>
-</ul>
+  <h3>Deliverables:</h3>
+  <ul>
+    <li>Detected Harris corners overlaid on image.</li>
+    <li>Detected corners after applying ANMS.</li>
+  </ul>
 
-<div class="flex-center">
-  <figure><img src="harris_corners.png"><figcaption>Detected Harris Corners</figcaption></figure>
-  <figure><img src="anms_corners.png"><figcaption>Corners After ANMS</figcaption></figure>
-</div>
+  <div class="flex-center">
+    <figure class="source"><img src="harris_corners.png"><figcaption>Detected Harris Corners</figcaption></figure>
+    <figure class="source"><img src="anms_corners.png"><figcaption>Corners After ANMS</figcaption></figure>
+  </div>
 
-<!-- ====================== PART B.2 ====================== -->
-<h2>B.2: Feature Descriptor Extraction</h2>
-<p>
-  I extracted 8×8 normalized feature descriptors for each interest point by sampling from a larger 40×40 window. Each patch was bias/gain-normalized for illumination invariance. Below are several example patches visualized.
-</p>
+  <!-- ====================== PART B.2 ====================== -->
+  <h2>B.2: Feature Descriptor Extraction</h2>
+  <p>
+    I extracted 8×8 normalized feature descriptors for each interest point by sampling from a larger 40×40 window. Each patch was bias/gain-normalized for illumination invariance. Below are several example patches visualized.
+  </p>
 
-<h3>Deliverables:</h3>
-<ul>
-  <li>Extracted 8×8 normalized feature descriptors.</li>
-  <li>Show several extracted feature patches.</li>
-</ul>
+  <h3>Deliverables:</h3>
+  <ul>
+    <li>Extracted 8×8 normalized feature descriptors.</li>
+    <li>Show several extracted feature patches.</li>
+  </ul>
 
-<div class="flex-center">
-  <figure><img src="feature_patch_examples.png"><figcaption>Sample Extracted Feature Patches</figcaption></figure>
-</div>
+  <div class="flex-center">
+    <figure class="mosaic"><img src="feature_patch_examples.png"><figcaption>Sample Extracted Feature Patches</figcaption></figure>
+  </div>
 
-<!-- ====================== PART B.3 ====================== -->
-<h2>B.3: Feature Matching</h2>
-<p>
-  I matched features between image pairs using the ratio test described by Lowe. Matches were accepted if the ratio between the first and second nearest neighbor distances was below a threshold (typically 0.7). Below are visualizations showing matched features with lines drawn between corresponding keypoints.
-</p>
+  <!-- ====================== PART B.3 ====================== -->
+  <h2>B.3: Feature Matching</h2>
+  <p>
+    I matched features between image pairs using the ratio test described by Lowe. Matches were accepted if the ratio between the first and second nearest neighbor distances was below a threshold (typically 0.7). Below are visualizations showing matched features with lines drawn between corresponding keypoints.
+  </p>
 
-<h3>Deliverables:</h3>
-<ul>
-  <li>Show matched features between image pairs.</li>
-</ul>
+  <h3>Deliverables:</h3>
+  <ul>
+    <li>Show matched features between image pairs.</li>
+  </ul>
 
-<div class="flex-center">
-  <figure><img src="matched_features1.png"><figcaption>Matched Features (Set 1)</figcaption></figure>
-  <figure><img src="matched_features2.png"><figcaption>Matched Features (Set 2)</figcaption></figure>
-</div>
+  <div class="flex-center">
+    <figure class="source"><img src="matched_features1.png"><figcaption>Matched Features (Set 1)</figcaption></figure>
+    <figure class="source"><img src="matched_features2.png"><figcaption>Matched Features (Set 2)</figcaption></figure>
+  </div>
 
-<!-- ====================== PART B.4 ====================== -->
-<h2>B.4: RANSAC for Robust Homography</h2>
-<p>
-  Using a 4-point RANSAC approach, I estimated robust homographies that reject outlier correspondences. I then generated automatic mosaics using these homographies and compared them with manually aligned results.
-</p>
+  <!-- ====================== PART B.4 ====================== -->
+  <h2>B.4: RANSAC for Robust Homography</h2>
+  <p>
+    Using a 4-point RANSAC approach, I estimated robust homographies that reject outlier correspondences. I then generated automatic mosaics using these homographies and compared them with manually aligned results.
+  </p>
 
-<h3>Deliverables:</h3>
-<ul>
-  <li>Implement 4-point RANSAC for homography estimation.</li>
-  <li>Compare manually vs automatically stitched mosaics.</li>
-  <li>Show at least 3 automatically generated mosaics.</li>
-</ul>
+  <h3>Deliverables:</h3>
+  <ul>
+    <li>Implement 4-point RANSAC for homography estimation.</li>
+    <li>Compare manually vs automatically stitched mosaics.</li>
+    <li>Show at least 3 automatically generated mosaics.</li>
+  </ul>
 
 <h3>Mosaic Results:</h3>
 
 <h4>Mosaic 1:</h4>
 <div class="flex-center">
-  <figure><img src="outside1.jpg"><figcaption>Source 1</figcaption></figure>
-  <figure><img src="outside2.jpg"><figcaption>Source 2</figcaption></figure>
+  <figure class="source"><img src="outside1.jpg"><figcaption>Source 1</figcaption></figure>
+  <figure class="source"><img src="outside2.jpg"><figcaption>Source 2</figcaption></figure>
 </div>
 <div class="flex-center">
-  <figure><img src="outside_mosaic.jpg"><figcaption>Mosaic 1 Result (Manual)</figcaption></figure>
-  <figure><img src="outside_mosaic_automatic.jpg"><figcaption>Mosaic 1 Result (Automatic)</figcaption></figure>
-
+  <figure class="mosaic"><img src="outside_mosaic.jpg"><figcaption>Mosaic 1 Result (Manual)</figcaption></figure>
+  <figure class="mosaic"><img src="outside_mosaic_automatic.jpg"><figcaption>Mosaic 1 Result (Automatic)</figcaption></figure>
 </div>
 
 <h4>Mosaic 2:</h4>
 <div class="flex-center">
-  <figure><img src="hmmb1.jpg"><figcaption>Source 1</figcaption></figure>
-  <figure><img src="hmmb2.jpg"><figcaption>Source 2</figcaption></figure>
+  <figure class="source"><img src="hmmb1.jpg"><figcaption>Source 1</figcaption></figure>
+  <figure class="source"><img src="hmmb2.jpg"><figcaption>Source 2</figcaption></figure>
 </div>
 <div class="flex-center">
-  <figure><img src="hmmb_mosaic.jpg"><figcaption>Mosaic 2 Result (Manual)</figcaption></figure>
-  <figure><img src="hmmb_mosaic_automatic.jpg"><figcaption>Mosaic 2 Result (Automatic)</figcaption></figure>
+  <figure class="mosaic"><img src="hmmb_mosaic.jpg"><figcaption>Mosaic 2 Result (Manual)</figcaption></figure>
+  <figure class="mosaic"><img src="hmmb_mosaic_automatic.jpg"><figcaption>Mosaic 2 Result (Automatic)</figcaption></figure>
 </div>
 
 <h4>Mosaic 3:</h4>
 <div class="flex-center">
-  <figure><img src="books1.jpg"><figcaption>Source 1</figcaption></figure>
-  <figure><img src="books2.jpg"><figcaption>Source 2</figcaption></figure>
+  <figure class="source"><img src="books1.jpg"><figcaption>Source 1</figcaption></figure>
+  <figure class="source"><img src="books2.jpg"><figcaption>Source 2</figcaption></figure>
 </div>
 <div class="flex-center">
-  <figure><img src="books_mosaic.jpg"><figcaption>Mosaic 3 Result (Manual)</figcaption></figure>
-  <figure><img src="books_mosaic_automatic.jpg"><figcaption>Mosaic 3 Result (Automatic)</figcaption></figure>
+  <figure class="mosaic"><img src="books_mosaic.jpg"><figcaption>Mosaic 3 Result (Manual)</figcaption></figure>
+  <figure class="mosaic"><img src="books_mosaic_automatic.jpg"><figcaption>Mosaic 3 Result (Automatic)</figcaption></figure>
 </div>
 
 <h4>Mosaic 4:</h4>
 <div class="flex-center">
-  <figure><img src="apt1.png"><figcaption>Source 1</figcaption></figure>
-  <figure><img src="apt2.png"><figcaption>Source 2</figcaption></figure>
+  <figure class="source"><img src="apt1.png"><figcaption>Source 1</figcaption></figure>
+  <figure class="source"><img src="apt2.png"><figcaption>Source 2</figcaption></figure>
 </div>
 <div class="flex-center">
-  <figure><img src="apt_mosaic.jpg"><figcaption>Mosaic 4 Result (Manual)</figcaption></figure>
-  <figure><img src="apt_mosaic_automatic.jpg"><figcaption>Mosaic 4 Result (Automatic)</figcaption></figure>
+  <figure class="mosaic"><img src="apt_mosaic.jpg"><figcaption>Mosaic 4 Result (Manual)</figcaption></figure>
+  <figure class="mosaic"><img src="apt_mosaic_automatic.jpg"><figcaption>Mosaic 4 Result (Automatic)</figcaption></figure>
 </div>
+
 
 </body>
 </html>
