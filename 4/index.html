@@ -93,16 +93,27 @@
 
 
   <h2>Part 1: 2D Neural Field</h2>
-
-  <h3>Part 2.1: Create Rays from Cameras</h3>
   <p>
     In this section, I explored the concept of a <b>Neural Radiance Field (NeRF)</b> in 2D by creating a Neural Field to represent a 2D image. Since there is no radiance in 2D, the network directly maps pixel coordinates to RGB color values. I implemented a <b>Multilayer Perceptron (MLP)</b> with 4 fully connected layers (3 hidden layers with <b>ReLU</b> activations and 1 output layer with <b>Sigmoid</b>) to map 2D pixel coordinates to RGB colors. To better capture high-frequency details in the image, I applied <b>Sinusoidal Positional Encoding (PE)</b> to expand the input coordinates into a higher-dimensional space. To efficiently train the network, I implemented a dataloader that randomly samples a batch of pixel coordinates and their corresponding colors at each iteration. Inputs and outputs were normalized to the range [0, 1] to ensure stable training. The network was trained using <b>mean squared error (MSE)</b> loss and optimized with the <b>Adam</b> optimizer at a learning rate of 0.01. Performance was monitored using <b>PSNR</b> to evaluate the reconstruction quality. I experimented with different network widths and maximum frequencies for positional encoding to study their effect on reconstruction quality, specifically testing widths of 64 and 256 and maximum frequencies of 2 and 10. During training, I visualized intermediate outputs to monitor the network's progression and compared final results across these hyperparameter choices. I found that a width of 256 and a maximum frequency of 10 produced the best reconstructions.
   </p>
 
-  
+  <p>For training the 2D model, I used the following hyperparameters:</p>
+    <ul>
+        <li><strong>Number of iterations:</strong> 3,000</li>
+        <li><strong>Learning rate:</strong> 0.01</li>
+        <li><strong>Batch size:</strong> 10,000</li>
+        <li><strong>Positional encoding max frequencies:</strong> 2 and 10</li>
+        <li><strong>Hidden layer widths:</strong> 64 and 256</li>
+    </ul>
+
+  <h3>Part 2.1: Create Rays from Cameras</h3>
+  <p>
+    In this part, I implemented the transformations required to convert between different coordinate systems for a pinhole camera. I first converted points from camera coordinates to world coordinates using the camera-to-world (c2w) transformation matrix. I then implemented the inverse process to map pixel coordinates back to camera coordinates using the intrinsic matrix. Finally, I computed rays for each pixel, defining each ray by its origin (the camera position in world coordinates) and its normalized direction, using the previously implemented transformations to determine the 3D directions from the pixel locations. All three functions support batched implementations.
+  </p>
+
   <h3>Part 2.2: Create Rays from Cameras</h3>
   <p>
-    In this part, I implemented ray sampling from multiple images for NeRF training. Using the camera intrinsics and extrinsics, I converted pixel coordinates into ray origins and directions, accounting for the offset to the pixel center. To sample rays, I flattened all pixels from all images and performed global sampling to select N rays per training iteration. Along each ray, I discretized 3D points by uniformly sampling 64 points between near and far bounds, which were adjusted based on the training task. To reduce overfitting, I added small random perturbations to these samples during training, ensuring that different positions along each ray were visited across iterations.
+    In this part, I implemented ray sampling from multiple images for NeRF training. Using the camera intrinsics and extrinsics, I converted pixel coordinates into ray origins and directions, accounting for the offset to the pixel center. To sample rays, I flattened all pixels from all images and performed global sampling to select <b>N</b> rays per training iteration. Along each ray, I discretized 3D points by uniformly sampling 64 points between <b>near</b> and <b>far</b> bounds, which were adjusted based on the training task. To reduce overfitting, I added small random perturbations to these samples during training, ensuring that different positions along each ray were visited across iterations.
   </p>
 
   <h3>Part 2.3: Putting the Dataloading All Together</h3>
@@ -118,10 +129,20 @@
 
   <h3>Part 2.5: Volume Rendering</h3>
   <p>
-    In this part, I implemented the volume rendering equation in PyTorch to compute the color of each ray from the predicted densities and RGB values of the sampled points. Given a batch of samples along each ray, I first scaled the predicted densities by the step size and converted them to alpha value. Next, I computed the accumulated transmittance T along each ray using the cumulative sum of densities, which represents how much light reaches each point without being absorbed. The weights for each sample were then calculated as the product of the alpha values and the transmittance, and the final rendered color of each ray was obtained as the weighted sum of the RGB values along the ray. 
+    In this part, I implemented the volume rendering equation in PyTorch to compute the color of each ray from the predicted densities and RGB values of the sampled points. Given a batch of samples along each ray, I first scaled the predicted densities by the step size and converted them to alpha value. Next, I computed the accumulated transmittance <b>T</b> along each ray using the cumulative sum of densities, which represents how much light reaches each point without being absorbed. The weights for each sample were then calculated as the product of the alpha values and the transmittance, and the final rendered color of each ray was obtained as the weighted sum of the RGB values along the ray. 
   </p>
 
-  
+  <p>For training the NeRF model on the Lego dataset, I used the following hyperparameters:</p>
+    <ul>
+        <li><strong>Number of iterations:</strong> 3,000</li>
+        <li><strong>Batch size:</strong> 10,000 rays per iteration</li>
+        <li><strong>Number of samples per ray:</strong> 64</li>
+        <li><strong>Number of frames (images):</strong> 60</li>
+        <li><strong>Learning rate:</strong> 0.0005</li>
+        <li><strong>Positional encoding max frequencies:</strong> 4 (ray directions) and 10 (coordinates)</li>
+        <li><strong>Step size for volume rendering:</strong> 0.01</li>
+    </ul>
+
   <h3>Ray Generation Example</h3>
 
   <h3>NeRF MLP Example</h3>
