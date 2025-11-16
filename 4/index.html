@@ -155,8 +155,14 @@
 
   <h3>Part 2.3: Putting the Dataloading All Together</h3>
   <p> 
-    I implemented a <b>RaysData</b> dataloader to handle ray generation and sampling for NeRF training. For each image, the dataloader converts pixel coordinates into ray origins and directions using the camera intrinsics and camera-to-world matrices, while also storing the corresponding pixel colors. All rays and pixels from every image are concatenated into a single dataset, and image offsets are tracked to enable retrieval of rays for specific images. During training, the <b>sample_rays(N)</b> method randomly selects N rays from the full dataset, providing diverse ray samples per iteration. This setup efficiently supports batching, global ray sampling across multiple images, and allows the NeRF model to learn a consistent 3D scene representation. Below are two visualizations showing the cameras, rays, and sampled points in 3D:
+    I implemented a <b>RaysData</b> dataloader to handle ray generation and sampling for NeRF training. For each image, the dataloader converts pixel coordinates into ray origins and directions using the camera intrinsics and camera-to-world matrices, while also storing the corresponding pixel colors. All rays and pixels from every image are concatenated into a single dataset, and image offsets are tracked to enable retrieval of rays for specific images. During training, the <b>sample_rays(N)</b> method randomly selects N rays from the full dataset, providing diverse ray samples per iteration. This setup efficiently supports batching, global ray sampling across multiple images, and allows the NeRF model to learn a consistent 3D scene representation. Below are three visualizations showing the cameras, rays, and sampled points in 3D:
   </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="2_3_1.png"><figcaption>Random Rays from Multiple Images</figcaption></figure>
+    <figure class="source"><img src="2_3_2.png"><figcaption>Random Rays From First Image</figcaption></figure>
+    <figure class="source"><img src="2_3_3.png"><figcaption>Random Rays From Image Corner</figcaption></figure>
+  </div>
 
   <h3>Part 2.4: Neural Radiance Field</h3>
   <p>
