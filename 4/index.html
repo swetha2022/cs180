@@ -73,7 +73,7 @@
 
   <h3>Part 0.1: Calibrating Your Camera</h3>
   <p>
-    To calibrate the camera, I first printed the ArUco calibration tags and captured 30-50 images using a phone camera, keeping the zoom consistent. While taking the pictures, I varied the angle and distance of the camera to improve calibration accuracy. Next, I wrote a script to detect the ArUco tags in each image. For each detected tag, I collected its corner coordinates and corresponding 3D world points, then used OpenCV's <code>cv2.calibrateCamera()</code> to compute the camera intrinsics and distortion coefficients.
+    To calibrate the camera, I first printed the ArUco calibration tags and captured 30-50 images using a phone camera, keeping the zoom consistent. While taking the pictures, I varied the angle and distance of the camera to improve calibration accuracy. Next, I wrote a script to detect the ArUco tags in each image. For each detected tag, I collected its corner coordinates and corresponding 3D world points, then used OpenCV's <b>cv2.calibrateCamera()</b> to compute the camera intrinsics and distortion coefficients.
   </p> 
 
   <h3>Part 0.2: Capturing a 3D Object Scan</h3>
@@ -83,12 +83,12 @@
 
   <h3>Part 0.3: Estimating Camera Pose</h3>
   <p>
-    Using the calibrated camera parameters, I estimated the camera pose for each image. I detected the ArUco tags in each image and used OpenCV's <code>cv2.solvePnP()</code> function to compute the rotation and translation vectors that describe the camera's position and orientation relative to the world coordinate system defined by the tags. Below are two screenshots of my cloud of cameras in Viser showing the camera frustums' poses and images:
+    Using the calibrated camera parameters, I estimated the camera pose for each image. I detected the ArUco tags in each image and used OpenCV's <b>cv2.solvePnP()</b> function to compute the rotation and translation vectors that describe the camera's position and orientation relative to the world coordinate system defined by the tags. Below are two screenshots of my cloud of cameras in Viser showing the camera frustums' poses and images:
   </p> 
 
   <h3>Part 0.4: Undistorting images and creating a dataset</h3>
   <p>
-    I undistorted the images from Part 0.3 using the camera intrinsics and distortion coefficients computed in Part 0.1. Each image was cropped to include only valid pixels after undistortion, and the camera intrinsic matrix was updated accordingly. I then split the dataset—including images and c2w matrices—into training and validation sets (as I generated new camera poses using a single training example for testing in Part 2.6). I saved the images, c2w matrices, and the updated camera intrinsic matrix into a single <code>.npz</code> file for NeRF training.
+    I undistorted the images from Part 0.3 using the camera intrinsics and distortion coefficients computed in Part 0.1. Each image was cropped to include only valid pixels after undistortion, and the camera intrinsic matrix was updated accordingly. I then split the dataset—including images and c2w matrices—into training and validation sets (as I generated new camera poses using a single training example for testing in Part 2.6). I saved the images, c2w matrices, and the updated camera intrinsic matrix into a single <b>.npz</b> file for NeRF training.
   </p>
 
 
