@@ -97,6 +97,10 @@
     In this section, I explored the concept of a <b>Neural Radiance Field (NeRF)</b> in 2D by creating a Neural Field to represent a 2D image. Since there is no radiance in 2D, the network directly maps pixel coordinates to RGB color values. I implemented a <b>Multilayer Perceptron (MLP)</b> with 4 fully connected layers (3 hidden layers with <b>ReLU</b> activations and 1 output layer with <b>Sigmoid</b>) to map 2D pixel coordinates to RGB colors. To better capture high-frequency details in the image, I applied <b>Sinusoidal Positional Encoding (PE)</b> to expand the input coordinates into a higher-dimensional space. To efficiently train the network, I implemented a dataloader that randomly samples a batch of pixel coordinates and their corresponding colors at each iteration. Inputs and outputs were normalized to the range [0, 1] to ensure stable training. The network was trained using <b>mean squared error (MSE)</b> loss and optimized with the <b>Adam</b> optimizer at a learning rate of 0.01. Performance was monitored using <b>PSNR</b> to evaluate the reconstruction quality. I experimented with different network widths and maximum frequencies for positional encoding to study their effect on reconstruction quality, specifically testing widths of 64 and 256 and maximum frequencies of 2 and 10. During training, I visualized intermediate outputs to monitor the network's progression and compared final results across these hyperparameter choices. I found that a width of 256 and a maximum frequency of 10 produced the best reconstructions.
   </p>
 
+  <div class="flex-center">
+    <figure class="mosaic"><img src="1_architecture.png"><figcaption>Model Architecture</figcaption></figure>
+  </div>
+
   <p>For training the 2D model, I used the following hyperparameters:</p>
     <ul>
         <li><strong>Number of iterations:</strong> 3,000</li>
@@ -169,6 +173,9 @@
     In this part, I implemented the NeRF network as a PyTorch class, <b>NeRFMLP</b>, to predict the color and density of 3D points sampled along rays. The input to the network consists of the 3D world coordinates of the points and their corresponding ray directions. Both the coordinates and ray directions are encoded using <b>sinusoidal PE</b> to enable the network to capture high-frequency details, with 10 frequency levels for the coordinates and 4 for the directions. The network includes skip connections that inject the positional encoding of the coordinates into the middle of the MLP, helping to preserve information across layers. The MLP outputs a scalar density for each point, constrained to be positive using a <b>ReLU</b> activation, and an RGB color for each point, constrained to the range [0, 1] with a <b>Sigmoid</b> activation. This design allows the network to learn a view-dependent radiance field, where the predicted color varies with the ray direction, and the density determines the contribution of each point along a ray during volume rendering.
   </p>
 
+  <div class="flex-center">
+    <figure class="mosaic"><img src="2_4_architecture.png"><figcaption>Model Architecture</figcaption></figure>
+  </div>
 
   <h3>Part 2.5: Volume Rendering</h3>
   <p>
