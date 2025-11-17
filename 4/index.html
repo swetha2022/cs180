@@ -26,11 +26,11 @@
     }
 
     figure.source {
-      width: 15%;
+      width: 20%;
     }
 
     figure.mosaic {
-      width: 15%;
+      width: 20%;
     }
 
     figure img {
@@ -83,8 +83,15 @@
 
   <h3>Part 0.3: Estimating Camera Pose</h3>
   <p>
-    Using the calibrated camera parameters, I estimated the camera pose for each image. I detected the ArUco tags in each image and used OpenCV's <b>cv2.solvePnP()</b> function to compute the rotation and translation vectors that describe the camera's position and orientation relative to the world coordinate system defined by the tags. Below are two screenshots of my cloud of cameras in Viser showing the camera frustums' poses and images:
+    Using the calibrated camera parameters, I estimated the camera pose for each image. I detected the ArUco tags in each image and used OpenCV's <b>cv2.solvePnP()</b> function to compute the rotation and translation vectors that describe the camera's position and orientation relative to the world coordinate system defined by the tags. Below are four screenshots of my cloud of cameras in Viser showing the camera frustums' poses and images:
   </p> 
+
+  <div class="flex-center">
+    <figure class="source"><img src="cloud1.PNG"><figcaption>View 1</figcaption></figure>
+    <figure class="source"><img src="cloud2.PNG"><figcaption>View 2</figcaption></figure>
+    <figure class="source"><img src="cloud3.PNG"><figcaption>View 3</figcaption></figure>
+    <figure class="source"><img src="cloud4.PNG"><figcaption>View 4</figcaption></figure>
+  </div>
 
   <h3>Part 0.4: Undistorting images and creating a dataset</h3>
   <p>
