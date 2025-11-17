@@ -205,7 +205,7 @@
 
   <h3>Part 2.5: Volume Rendering</h3>
   <p>
-    In this part, I implemented the volume rendering equation in PyTorch to compute the color of each ray from the predicted densities and RGB values of the sampled points. Given a batch of samples along each ray, I first scaled the predicted densities by the step size and converted them to alpha value. Next, I computed the accumulated transmittance <b>T</b> along each ray using the cumulative sum of densities, which represents how much light reaches each point without being absorbed. The weights for each sample were then calculated as the product of the alpha values and the transmittance, and the final rendered color of each ray was obtained as the weighted sum of the RGB values along the ray. 
+    In this part, I implemented the volume rendering equation in PyTorch to compute the color of each ray from the predicted densities and RGB values of the sampled points. Given a batch of samples along each ray, I first scaled the predicted densities by the step size and calculated the alpha values for each sample along the ray. Next, I computed the accumulated transmittance <b>T</b> along each ray using the cumulative sum of densities. The weights for each sample were then calculated as the product of the alpha values and the transmittance, and the final rendered color of each ray was obtained as the weighted sum of the RGB values along the ray. 
   </p>
 
   <p>For training the NeRF model on the Lego dataset, I used the following hyperparameters:</p>
@@ -249,7 +249,7 @@
   </p>
 
   <p>
-    After training, I used the starter code to generate new camera poses for testing and created a GIF showing a camera circling the object for both datasets, providing novel views. I also generated plots of the training loss and intermediate renders of the scene throughout training, which allowed me to analyze how the NeRF improved over time for both Lafufu and my dataset.
+    After training, I used the starter code to generate new camera poses for testing and created a GIF showing a camera circling the object for both datasets, providing novel views. I also generated plots of the training loss, training PSNR, and validation PSNR as well as intermediate renders of the scene throughout training, which allowed me to analyze how the NeRF improved over time for both Lafufu and my dataset.
   </p>
 
   <br>
