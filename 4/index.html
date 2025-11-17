@@ -208,6 +208,23 @@
     After training, I used the starter code to generate new camera poses for testing and created a GIF showing a camera circling the object for both datasets, providing novel views. I also generated plots of the training loss and intermediate renders of the scene throughout training, which allowed me to analyze how the NeRF improved over time for both Lafufu and my dataset.
   </p>
 
+  <div class="flex-center">
+    <figure class="source"><img src="task_2_results_laf_second/part_2_image_iter_1.png"><figcaption>Lafufu (1 Iteration)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_laf_second/part_2_image_iter_100.png"><figcaption>Lafufu (100 Iterations)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_laf_second/part_2_image_iter_500.png"><figcaption>Lafufu (500 Iterations)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="source"><img src="task_2_results_laf_second/part_2_image_iter_1000.png"><figcaption>Lafufu (1000 Iterations)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_laf_second/part_2_image_iter_2000.png"><figcaption>Lafufu (2000 Iterations)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_laf_second/part_2_image_iter_3000.png"><figcaption>Lafufu (3000 Iterations)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="source"><img src="task_2_results_laf_second/part_2_train_loss.png"><figcaption>Training Loss (Lafufu)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_laf_second/part_2_train_PSNR.png"><figcaption>Training PSNR (Lafufu)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_laf_second/part_2_val_PSNR.png"><figcaption>Validation PSNR (Lafufu)</figcaption></figure>
+  </div>
 
   <div class="flex-center">
     <figure class="source"><img src="task_2_results_nerf_second/part_2_image_iter_1.png"><figcaption>Yellow Truck (1 Iteration)</figcaption></figure>
@@ -221,15 +238,16 @@
     <figure class="source"><img src="task_2_results_nerf_second/part_2_image_iter_3000.png"><figcaption>Yellow Truck (3000 Iterations)</figcaption></figure>
   </div>
 
+  <div class="flex-center">
+    <figure class="source"><img src="task_2_results_nerf_second/part_2_train_loss.png"><figcaption>Training Loss (Yellow Truck)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_nerf_second/part_2_train_PSNR.png"><figcaption>Training PSNR (Yellow Truck)</figcaption></figure>
+    <figure class="source"><img src="task_2_results_nerf_second/part_2_val_PSNR.png"><figcaption>Validation PSNR (Yellow Truck)</figcaption></figure>
+  </div>
+
   <h4 style="text-align: center; font-weight: bold;">Novel Camera Views</h4>
   <div class="flex-center">
     <figure class="mosaic"><img src="task_2_results_laf_second/orbit.gif"><figcaption>Novel Camera Views<br>(Lafufu)</figcaption></figure>
-    <figure class="mosaic"><img src="task_2_results_nerf_second/orbit.gif"><figcaption>Novel Camera Views<br>(Yellow Truck New Images)</figcaption></figure>
-  </div>
-
-  <h3>Training Loss & PSNR</h3>
-  <div class="flex-center">
-    <figure class="mosaic"><img src="loss_psnr.png"><figcaption>Training loss / validation PSNR</figcaption></figure>
+    <figure class="mosaic"><img src="task_2_results_nerf_second/orbit.gif"><figcaption>Novel Camera Views<br>(Yellow Truck)</figcaption></figure>
   </div>
 
 </body>
