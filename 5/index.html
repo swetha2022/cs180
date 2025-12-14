@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project 5A: The Power of Diffusion Models!</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      margin: 30px;
+      line-height: 1.6;
+    }
+    h1, h2, h3, h4 {
+      text-align: center;
+    }
+
+    .flex-center {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end; 
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    figure {
+      margin: 0;
+    }
+
+    figure.source {
+      width: 20%;
+    }
+
+    figure.mosaic {
+      width: 20%;
+    }
+
+    figure.other {
+      width: 45%;
+    }
+
+    figure.curves {
+      width: 35%;
+    }
+
+    figure img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    figcaption {
+      font-size: 13px;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    p {
+      text-align: justify;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .code-block {
+      background: #eee;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      display: block;
+      margin: 8px 0;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Project 5A: The Power of Diffusion Models!</h1>
+  <h3>Your Name Here</h3>
+  
+  <h2>Introduction</h2>
+  <p>
+    In this project, I explored the fascinating world of diffusion models, which have revolutionized image generation in recent years. The project was divided into two main parts: first working with pre-trained diffusion models to understand the denoising process, and then implementing my own diffusion model from scratch. I began by experimenting with DeepFloyd IF, a state-of-the-art text-to-image model, to generate images from text prompts and perform various manipulations. I implemented forward and reverse diffusion processes, learning how noise is progressively added and removed. I then explored techniques like Classifier-Free Guidance (CFG) to improve image quality and image-to-image translation to transform existing images. Finally, I built and trained my own diffusion model on the MNIST dataset, implementing both unconditional and conditional generation, and even created a class-conditional diffusion model capable of generating specific digits on demand. Through this project, I gained deep insights into how modern generative AI systems work and the mathematics underlying diffusion processes.
+  </p>
+
+  <h2>Part 0: Setup and Sampling from Pre-trained Models</h2>
+  <h3>Part 0.1: Getting Started with DeepFloyd</h3>
+  <p>
+    To begin, I set up the DeepFloyd IF model, a powerful text-to-image diffusion model. I loaded the pretrained Stage 1 model, which operates at 64×64 resolution and uses a UNet architecture to denoise images. I tested the model by generating images from three different text prompts: "an oil painting of a snowy mountain village", "a man wearing a hat", and "a rocket ship". For each prompt, I used 20 inference steps to progressively denoise from random noise to a coherent image. Below are the generated images:
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_mountain.png"><figcaption>An oil painting of a<br>snowy mountain village</figcaption></figure>
+    <figure class="source"><img src="placeholder_man.png"><figcaption>A man wearing a hat</figcaption></figure>
+    <figure class="source"><img src="placeholder_rocket.png"><figcaption>A rocket ship</figcaption></figure>
+  </div>
+
+  <h2>Part 1: Sampling Loops</h2>
+  <h3>Part 1.1: Implementing the Forward Process</h3>
+  <p>
+    The forward diffusion process gradually adds Gaussian noise to an image over a series of timesteps. I implemented this by using the closed-form solution that allows us to directly compute a noisy image at any timestep <code>t</code> without iterating through all previous steps. The formula uses pre-computed noise schedule coefficients to blend the original image with random noise. I tested this on the "Campanile" test image provided, creating noisy versions at timesteps <code>t = [250, 500, 750]</code>. As expected, the image becomes progressively noisier at higher timesteps, eventually becoming almost pure noise.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_original.png"><figcaption>Original Image</figcaption></figure>
+    <figure class="source"><img src="placeholder_t250.png"><figcaption>t = 250</figcaption></figure>
+    <figure class="source"><img src="placeholder_t500.png"><figcaption>t = 500</figcaption></figure>
+    <figure class="source"><img src="placeholder_t750.png"><figcaption>t = 750</figcaption></figure>
+  </div>
+
+  <h3>Part 1.2: Classical Denoising</h3>
+  <p>
+    To understand the challenge of denoising, I applied Gaussian blur filtering to the noisy images from Part 1.1. While Gaussian blur can remove some noise, it also significantly reduces image sharpness and detail. The results show that classical denoising methods are insufficient for heavily noised images, motivating the need for learned diffusion models that can intelligently reconstruct image structure.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_blur250.png"><figcaption>Gaussian Blur, t = 250</figcaption></figure>
+    <figure class="source"><img src="placeholder_blur500.png"><figcaption>Gaussian Blur, t = 500</figcaption></figure>
+    <figure class="source"><img src="placeholder_blur750.png"><figcaption>Gaussian Blur, t = 750</figcaption></figure>
+  </div>
+
+  <h3>Part 1.3: One-Step Denoising</h3>
+  <p>
+    Next, I used the pretrained diffusion model's UNet to estimate the noise in the noisy images and attempted single-step denoising. The UNet predicts the noise component at each timestep, which can then be removed to recover a cleaner image. However, one-step denoising from heavily corrupted images (high timesteps) produces blurry, low-quality results because the model needs multiple refinement steps to progressively recover fine details. The results are better than Gaussian blur but still far from the original image quality.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_onestep250.png"><figcaption>One-Step Denoise, t = 250</figcaption></figure>
+    <figure class="source"><img src="placeholder_onestep500.png"><figcaption>One-Step Denoise, t = 500</figcaption></figure>
+    <figure class="source"><img src="placeholder_onestep750.png"><figcaption>One-Step Denoise, t = 750</figcaption></figure>
+  </div>
+
+  <h3>Part 1.4: Iterative Denoising</h3>
+  <p>
+    To achieve high-quality reconstruction, I implemented the iterative denoising procedure. Starting from a noisy image, the algorithm repeatedly estimates and removes noise, gradually refining the image over multiple timesteps. I used a strided timestep sequence (every 30 steps from 990 down to 0) to efficiently denoise while maintaining quality. The results show dramatic improvement compared to one-step denoising, successfully recovering the original Campanile image from pure noise. I also visualized intermediate denoising steps at timesteps <code>[690, 540, 390, 240, 90]</code> to show the progressive refinement.
+  </p>
+
+  <h4 style="text-align: center; font-weight: bold;">Iterative Denoising Results</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_iter690.png"><figcaption>t = 690</figcaption></figure>
+    <figure class="source"><img src="placeholder_iter540.png"><figcaption>t = 540</figcaption></figure>
+    <figure class="source"><img src="placeholder_iter390.png"><figcaption>t = 390</figcaption></figure>
+    <figure class="source"><img src="placeholder_iter240.png"><figcaption>t = 240</figcaption></figure>
+    <figure class="source"><img src="placeholder_iter90.png"><figcaption>t = 90</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_original.png"><figcaption>Original Image</figcaption></figure>
+    <figure class="source"><img src="placeholder_iter_final.png"><figcaption>Final Denoised Image</figcaption></figure>
+  </div>
+
+  <h3>Part 1.5: Diffusion Model Sampling</h3>
+  <p>
+    With the iterative denoising procedure working, I could now generate completely new images from pure random noise. Starting from Gaussian noise, the model progressively denoises to create images matching the conditioning prompt. I generated five images using the prompt "a high quality photo" and visualized the denoising trajectory for one of them. The results demonstrate the model's ability to synthesize diverse, realistic images from scratch.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_gen1.png"><figcaption>Generated Image 1</figcaption></figure>
+    <figure class="source"><img src="placeholder_gen2.png"><figcaption>Generated Image 2</figcaption></figure>
+    <figure class="source"><img src="placeholder_gen3.png"><figcaption>Generated Image 3</figcaption></figure>
+    <figure class="source"><img src="placeholder_gen4.png"><figcaption>Generated Image 4</figcaption></figure>
+    <figure class="source"><img src="placeholder_gen5.png"><figcaption>Generated Image 5</figcaption></figure>
+  </div>
+
+  <h3>Part 1.6: Classifier-Free Guidance (CFG)</h3>
+  <p>
+    To improve image quality and adherence to text prompts, I implemented Classifier-Free Guidance. CFG works by combining conditional and unconditional noise predictions, extrapolating in the direction of the conditional prediction. The guidance scale parameter controls this effect: higher values produce images that match the prompt more closely but may sacrifice diversity. I experimented with guidance scales of [1, 5, 7, 10] for the prompt "a high quality photo". Results show that moderate guidance (around 7) provides the best balance of quality and coherence.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_cfg1.png"><figcaption>CFG Scale = 1</figcaption></figure>
+    <figure class="source"><img src="placeholder_cfg5.png"><figcaption>CFG Scale = 5</figcaption></figure>
+    <figure class="source"><img src="placeholder_cfg7.png"><figcaption>CFG Scale = 7</figcaption></figure>
+    <figure class="source"><img src="placeholder_cfg10.png"><figcaption>CFG Scale = 10</figcaption></figure>
+  </div>
+
+  <h3>Part 1.7: Image-to-Image Translation</h3>
+  <p>
+    I implemented image-to-image translation by starting the denoising process from a noisy version of an existing image rather than pure noise. The <code>i_start</code> parameter controls how much noise is added initially—smaller values preserve more of the original structure, while larger values allow more creative freedom. I tested this with the Campanile image and various prompts, using different <code>i_start</code> values of [1, 3, 5, 7, 10, 20]. The results show how the balance between faithfulness to the original and adherence to the new prompt changes with noise level.
+  </p>
+
+  <h4 style="text-align: center; font-weight: bold;">Prompt: "a rocket ship"</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_i2i_1.png"><figcaption>i_start = 1</figcaption></figure>
+    <figure class="source"><img src="placeholder_i2i_3.png"><figcaption>i_start = 3</figcaption></figure>
+    <figure class="source"><img src="placeholder_i2i_5.png"><figcaption>i_start = 5</figcaption></figure>
+    <figure class="source"><img src="placeholder_i2i_7.png"><figcaption>i_start = 7</figcaption></figure>
+    <figure class="source"><img src="placeholder_i2i_10.png"><figcaption>i_start = 10</figcaption></figure>
+    <figure class="source"><img src="placeholder_i2i_20.png"><figcaption>i_start = 20</figcaption></figure>
+  </div>
+
+  <h4 style="text-align: center; font-weight: bold;">Additional Examples</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_ex1_orig.png"><figcaption>Original Image</figcaption></figure>
+    <figure class="source"><img src="placeholder_ex1_1.png"><figcaption>Prompt 1, i_start = 5</figcaption></figure>
+    <figure class="source"><img src="placeholder_ex1_2.png"><figcaption>Prompt 2, i_start = 5</figcaption></figure>
+  </div>
+
+  <h3>Part 1.7.1: Editing Hand-Drawn and Web Images</h3>
+  <p>
+    I tested image-to-image translation on hand-drawn sketches and web images. This demonstrates the model's ability to transform simple line drawings into photorealistic images and to re-imagine existing photographs in new styles or contexts.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_hand1.png"><figcaption>Hand-drawn Sketch</figcaption></figure>
+    <figure class="source"><img src="placeholder_hand1_result.png"><figcaption>Generated Result</figcaption></figure>
+  </div>
+
+  <h3>Part 1.7.2: Inpainting</h3>
+  <p>
+    I implemented inpainting by creating a binary mask indicating which regions to regenerate. During the denoising loop, I replace the masked region with the model's prediction while keeping the unmasked region from the original (noisy) image. This allows selective editing of images while preserving the rest of the content.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_inp_orig.png"><figcaption>Original Image</figcaption></figure>
+    <figure class="source"><img src="placeholder_inp_mask.png"><figcaption>Mask</figcaption></figure>
+    <figure class="source"><img src="placeholder_inp_result.png"><figcaption>Inpainted Result</figcaption></figure>
+  </div>
+
+  <h3>Part 1.7.3: Text-Conditional Image-to-Image Translation</h3>
+  <p>
+    I experimented with creative text prompts to transform images in interesting ways. By carefully crafting prompts and tuning the noise level, I could achieve various artistic effects while maintaining recognizable elements from the source image.
+  </p>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_creative1_orig.png"><figcaption>Original</figcaption></figure>
+    <figure class="source"><img src="placeholder_creative1_result.png"><figcaption>"Creative Prompt 1"</figcaption></figure>
+    <figure class="source"><img src="placeholder_creative2_result.png"><figcaption>"Creative Prompt 2"</figcaption></figure>
+  </div>
+
+  <h3>Part 1.8: Visual Anagrams</h3>
+  <p>
+    Visual anagrams are images that look like one thing when viewed normally but reveal a different image when flipped upside down. I implemented this by denoising with two different text prompts simultaneously: one for the normal orientation and one for the flipped orientation. At each denoising step, I estimate the noise for both prompts, flip the noise estimate for the second prompt, and average them together. This forces the model to find an image that satisfies both prompts at once. I experimented with several prompt pairs including "an oil painting of an old man" / "an oil painting of people around a campfire", "an oil painting of a snowy mountain village" / "a rocket ship", and my own creative prompt pair.
+  </p>
+
+  <h4 style="text-align: center; font-weight: bold;">Visual Anagram Examples</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_anagram1_normal.png"><figcaption>Normal: "an old man"</figcaption></figure>
+    <figure class="source"><img src="placeholder_anagram1_flip.png"><figcaption>Flipped: "people around<br>a campfire"</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_anagram2_normal.png"><figcaption>Normal: "a snowy<br>mountain village"</figcaption></figure>
+    <figure class="source"><img src="placeholder_anagram2_flip.png"><figcaption>Flipped: "a rocket ship"</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_anagram3_normal.png"><figcaption>Normal: "Your Prompt 1"</figcaption></figure>
+    <figure class="source"><img src="placeholder_anagram3_flip.png"><figcaption>Flipped: "Your Prompt 2"</figcaption></figure>
+  </div>
+
+  <h3>Part 1.9: Hybrid Images</h3>
+  <p>
+    Hybrid images are optical illusions that appear as one image when viewed up close but reveal a different image when viewed from far away. This works by combining the high-frequency components of one image with the low-frequency components of another. I implemented this by denoising with two different prompts simultaneously, applying a low-pass filter to the noise estimate from the first prompt and a high-pass filter to the noise estimate from the second prompt, then combining them. The result is an image that looks like the high-frequency prompt when viewed closely and transitions to the low-frequency prompt when viewed from a distance. I tested this with prompt pairs including "a skull" / "a man wearing a hat", "a lithograph of waterfalls" / "a lithograph of a skull", and my own creative combination.
+  </p>
+
+  <h4 style="text-align: center; font-weight: bold;">Hybrid Image Examples</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_hybrid1.png"><figcaption>Hybrid: "a skull" (low-freq)<br>+ "a man wearing a hat" (high-freq)</figcaption></figure>
+    <figure class="source"><img src="placeholder_hybrid2.png"><figcaption>Hybrid: "waterfalls" (low-freq)<br>+ "a skull" (high-freq)</figcaption></figure>
+    <figure class="source"><img src="placeholder_hybrid3.png"><figcaption>Hybrid: Your own<br>creative combination</figcaption></figure>
+  </div>
+
+  <h2>Part 2: Training a Diffusion Model from Scratch</h2>
+  <h3>Part 2.1: Training a Single-Step Denoising UNet</h3>
+  <p>
+    I began building my own diffusion model by implementing and training a UNet to denoise MNIST digits in a single step. The UNet uses a series of downsampling and upsampling blocks with skip connections. I trained it using L2 loss between the predicted and true noise, optimizing with the Adam optimizer. After training for 5 epochs with a batch size of 128 and learning rate of 1e-4, the model learned to denoise images reasonably well, though results were somewhat blurry due to the single-step limitation.
+  </p>
+
+  <p><strong>Training hyperparameters:</strong></p>
+  <ul>
+    <li><strong>Epochs:</strong> 5</li>
+    <li><strong>Batch size:</strong> 128</li>
+    <li><strong>Learning rate:</strong> 1e-4</li>
+    <li><strong>Optimizer:</strong> Adam</li>
+    <li><strong>Hidden dimension:</strong> 128</li>
+  </ul>
+
+  <div class="flex-center">
+    <figure class="curves"><img src="placeholder_loss_2_1.png"><figcaption>Training Loss Over Time</figcaption></figure>
+  </div>
+
+  <h4 style="text-align: center; font-weight: bold;">Denoising Results After Training</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_denoise_epoch1.png"><figcaption>Epoch 1</figcaption></figure>
+    <figure class="source"><img src="placeholder_denoise_epoch5.png"><figcaption>Epoch 5</figcaption></figure>
+  </div>
+
+  <h3>Part 2.2: Training a Diffusion Model</h3>
+  <p>
+    I extended the single-step model to a full diffusion model capable of iterative denoising. The key modification was conditioning the UNet on the timestep <code>t</code> by adding learned time embeddings to the hidden representations. I trained this time-conditioned UNet for 20 epochs, sampling noise levels uniformly during training. The model learned to denoise at various noise levels, enabling iterative refinement.
+  </p>
+
+  <p><strong>Training hyperparameters:</strong></p>
+  <ul>
+    <li><strong>Epochs:</strong> 20</li>
+    <li><strong>Batch size:</strong> 128</li>
+    <li><strong>Learning rate:</strong> 1e-4</li>
+    <li><strong>Optimizer:</strong> Adam</li>
+    <li><strong>Hidden dimension:</strong> 128</li>
+  </ul>
+
+  <div class="flex-center">
+    <figure class="curves"><img src="placeholder_loss_2_2.png"><figcaption>Training Loss Over Epochs</figcaption></figure>
+  </div>
+
+  <h4 style="text-align: center; font-weight: bold;">Sampling Results After Epoch 5</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_sample_5_1.png"><figcaption>Sample 1</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_5_2.png"><figcaption>Sample 2</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_5_3.png"><figcaption>Sample 3</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_5_4.png"><figcaption>Sample 4</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_5_5.png"><figcaption>Sample 5</figcaption></figure>
+  </div>
+
+  <h4 style="text-align: center; font-weight: bold;">Sampling Results After Epoch 20</h4>
+  <div class="flex-center">
+    <figure class="source"><img src="placeholder_sample_20_1.png"><figcaption>Sample 1</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_20_2.png"><figcaption>Sample 2</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_20_3.png"><figcaption>Sample 3</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_20_4.png"><figcaption>Sample 4</figcaption></figure>
+    <figure class="source"><img src="placeholder_sample_20_5.png"><figcaption>Sample 5</figcaption></figure>
+  </div>
+
+  <h3>Part 2.3: Adding Class-Conditioning</h3>
+  <p>
+    To enable controlled generation of specific digits, I added class conditioning to the UNet. I created one-hot encoded class vectors and concatenated them with the time embeddings before injecting into the network. During training, I randomly dropped the class conditioning 10% of the time to enable classifier-free guidance at sampling time. This allows the model to generate specific digits on demand while maintaining generation quality.
+  </p>
+
+  <p><strong>Training hyperparameters:</strong></p>
+  <ul>
+    <li><strong>Epochs:</strong> 20</li>
+    <li><strong>Batch size:</strong> 128</li>
+    <li><strong>Learning rate:</strong> 1e-4</li>
+    <li><strong>Optimizer:</strong> Adam</li>
+    <li><strong>Hidden dimension:</strong> 128</li>
+    <li><strong>Unconditional probability:</strong> 0.1</li>
+  </ul>
+
+  <div class="flex-center">
+    <figure class="curves"><img src="placeholder_loss_2_3.png"><figcaption>Training Loss Over Epochs</figcaption></figure>
+  </div>
+
+  <h4 style="text-align: center; font-weight: bold;">Class-Conditional Sampling After Epoch 5</h4>
+  <div class="flex-center">
+    <figure class="mosaic"><img src="placeholder_grid_5.png"><figcaption>Generated digits 0-9<br>(Epoch 5)</figcaption></figure>
+  </div>
+
+  <h4 style="text-align: center; font-weight: bold;">Class-Conditional Sampling After Epoch 20</h4>
+  <div class="flex-center">
+    <figure class="mosaic"><img src="placeholder_grid_20.png"><figcaption>Generated digits 0-9<br>(Epoch 20)</figcaption></figure>
+  </div>
+
+  <h2>Conclusion</h2>
+  <p>
+    Through this project, I gained hands-on experience with diffusion models, from using pre-trained models to building and training my own from scratch. I learned about the forward and reverse diffusion processes, the importance of iterative denoising, and advanced techniques like classifier-free guidance and image-to-image translation. Training my own diffusion model on MNIST taught me about UNet architectures, time conditioning, and class conditioning. The progression from blurry single-step denoising to sharp iterative generation demonstrated the power of the diffusion framework. This project provided valuable insights into how modern generative AI systems work and the mathematical principles underlying them.
+  </p>
+
+</body>
+</html>
