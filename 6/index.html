@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project 5B: Diffusion Models from Scratch</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      margin: 30px;
+      line-height: 1.6;
+    }
+    h1, h2, h3, h4 {
+      text-align: center;
+    }
+
+    .flex-center {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end; 
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    figure {
+      margin: 0;
+    }
+
+    figure.small {
+      width: 15%;
+    }
+
+    figure.source {
+      width: 20%;
+    }
+
+    figure.medium {
+      width: 30%;
+    }
+
+    figure.other {
+      width: 45%;
+    }
+
+    figure.curves {
+      width: 35%;
+    }
+
+    figure.large {
+      width: 60%;
+    }
+
+    figure img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    figcaption {
+      font-size: 13px;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    p {
+      text-align: justify;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .code-block {
+      background: #eee;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      display: block;
+      margin: 8px 0;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    th, td {
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Project 5B: Diffusion Models from Scratch</h1>
+  <h3>Your Name Here</h3>
+  
+  <h2>Introduction</h2>
+  <p>
+    In this project, I implemented and trained diffusion models from scratch, progressing from simple unconditional generation to sophisticated class-conditional models with classifier-free guidance. I began by training a simple denoising UNet on the MNIST dataset, learning the fundamentals of noise prediction and iterative denoising. I then extended this to a full time-conditioned diffusion model capable of generating diverse handwritten digits. Finally, I implemented class conditioning to enable controlled generation of specific digits, incorporating techniques like classifier-free guidance to improve sample quality. Beyond MNIST, I scaled up to train a UNet on higher-resolution images, experimenting with the impact of training time and exploring the differences between epsilon and velocity prediction parameterizations. Through this project, I gained deep practical experience with the architecture, training procedures, and sampling algorithms that power modern diffusion models.
+  </p>
+
+  <h2>Part 1.1: Implementing the UNet</h2>
+  <p>
+    I began by implementing an unconditional UNet architecture to perform denoising on MNIST images. 
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_1_architecture.png"><figcaption>Unconditional UNet</figcaption></figure>
+  </div>
+
+
+  <h3>Part 1.2: Using the UNet to Train a Denoiser</h3>
+  <p>
+    Before training, I visualized the noising processes over different sigma values.   
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_noise_viz.png"><figcaption>Visualization of the Noising Process</figcaption></figure>
+  </div>
+
+  <h3>Part 1.2.1: Training</h3>
+  <p>
+    Next, I trained the model to perform denoising using a sigma value of 0.5. I used Mean Squared Error (MSE) as the loss function and optimized the model using the Adam optimizer. The training process continued until convergence, with periodic evaluations on a validation set to monitor performance.  
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_train_loss.png"><figcaption>Training Loss Curve</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_1_original.png"><figcaption>Original Test Set Images</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_1_e1.png"><figcaption>Denoising after 1 epoch</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_1_e5.png"><figcaption>Denoising after 5 epochs</figcaption></figure>
+  </div>
+
+  <h3>Part 1.2.2: Out-of-Distribution Testing</h3>
+  <p>
+    To test the robustness of the trained denoiser, I tested its performance on different sigma values that it wasn't trained on. 
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_2_ood.png"><figcaption>Sample results on the test set with out-of-distribution noise levels</figcaption></figure>
+  </div>
+
+  <h3>Part 1.2.3: Denoising Pure Noise</h3>
+  <p>
+    In this part, I experimented the idea of training the model to denoise pure, random Gaussian noise. During training, I noticed that the generated outputs exhibit noticeable common patterns across samples. Rather than producing sharp, diverse images, the outputs tend to look blurry and converge toward similar average-looking structures. Fine details are largely absent, and the images often resemble a “prototype” of the training data rather than a specific instance. This behavior can be explained by the use of an MSE loss during training. Under an MSE objective, the optimal prediction is the point that minimizes the expected squared distance to all possible target images. This point corresponds to the mean (or centroid) of the training distribution in pixel space. In the context of denoising pure noise, where there is no informative signal to condition on, the model has no choice but to fall back to this average solution. Thus, the denoised output represents an estimate of the average training image rather than a realistic sample from the data distribution. The model is effectively predicting the centroid of the training images, which minimizes MSE but does not capture multimodal or high-frequency structure in the data. 
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_3_train_loss.png"><figcaption>Training Loss Curve</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_1_original.png"><figcaption>Original Test Set Images</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_3_e1.png"><figcaption>Denoising after 1 epoch</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="1_2_3_e5.png"><figcaption>Denoising after 5 epochs</figcaption></figure>
+  </div>
+
+  <h2>Part 2: Training a Diffusion Model</h2>
+
+  <h3>Part 2.1: Adding Time Conditioning to UNet</h3>
+  <p>
+    In this part, I use FCBlocks to inject the conditioning signal into the UNet.
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_1_architecture_time.png"><figcaption>Time-Conditioned UNet</figcaption></figure>
+  </div>
+
+  <h3>Part 2.2: Training the UNet</h3>
+  <p>
+    I trained the time-conditioned UNet by selecting a random image x1 from the training set and a random timestep t, adding noise to x1 to get xt, and training the denoiser to predict the flow at xt. I repeat this for different images and different timesteps until the model converges.
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_2_train_loss.png"><figcaption>Training Loss Curve</figcaption></figure>
+  </div>
+
+  <h3>Part 2.3: Sampling from the UNet</h3>
+  <p>
+    After training, I implemented the DDPM sampling algorithm to generate new digits from random noise. Starting from pure Gaussian noise, I iteratively denoise using the trained UNet, following the reverse diffusion process. At each timestep, I predict the noise, compute the denoised image, and add a small amount of random noise (except at the final step) to enable stochastic sampling.
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_3_sampling_results_1_epoch.png"><figcaption>After 1 epoch</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_3_sampling_results_5_epoch.png"><figcaption>After 5 epochs</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_3_sampling_results_10_epoch.png"><figcaption>After 10 epochs</figcaption></figure>
+  </div>
+
+  <h3>Part 2.4: Adding Class-Conditioning to UNet</h3>
+  <p>
+    To enable controlled generation of specific digits (0-9), I added class conditioning to the UNet. I represent each class as a learnable embedding vector, which is processed and combined with the time value before injection into the UNet. During training, I randomly drop the class condition 10% of the time. This enables classifier-free guidance at sampling time.
+  </p>
+
+  <h3>Part 2.5: Training the UNet</h3>
+  <p>
+    I implemented classifier-free guidance (CFG) to improve sample quality and adherence to the class condition. At each sampling step, I predict noise both conditionally and unconditionally. The final noise prediction is computed as: <code>noise = unconditional_noise + gamma * (conditional_noise - unconditional_noise)</code>, where <code>gamma</code> is the guidance scale.
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_5_training_loss_curve.png"><figcaption>Training Loss Curve (Using Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+  <h3>Part 2.6: Sampling from the UNet</h3>
+  <p>
+    I sampled with class-conditioning using classifier-free guidance with gamma = 5.0. To try to maintain the same performance after removing the exponential learning rate scheduler, I lowered the learning rate from 1e-2 to 1e-3, allowing the model to learn more steadily over time. Below are the sampling results after 1, 5, and 10 epochs of training with and without the learning rate scheduler.
+  </p>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_6_1_epoch_lrs.png"><figcaption>After 1 epoch (Using Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_6_5_epoch_lrs.png"><figcaption>After 5 epochs (Using Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_6_10_epoch_lrs.png"><figcaption>After 10 epochs (Using Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_6_1_epoch.png"><figcaption>After 1 epoch (No Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_6_5_epoch.png"><figcaption>After 5 epochs (No Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_6_10_epoch.png"><figcaption>After 10 epochs (No Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="medium"><img src="2_6_training_loss_curve.png"><figcaption>Training Loss Curve (No Learning Rate Scheduler)</figcaption></figure>
+  </div>
+
+</body>
+</html>
