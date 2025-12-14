@@ -78,21 +78,25 @@
 </head>
 <body>
   <h1>Project 5A: The Power of Diffusion Models!</h1>
-  <h3>Your Name Here</h3>
+  <h3>Link: https://swetha2022.github.io/cs180/5/index.html</h3>
   
   <h2>Introduction</h2>
   <p>
-    In this project, I explored the fascinating world of diffusion models, which have revolutionized image generation in recent years. The project was divided into two main parts: first working with pre-trained diffusion models to understand the denoising process, and then implementing my own diffusion model from scratch. I began by experimenting with DeepFloyd IF, a state-of-the-art text-to-image model, to generate images from text prompts and perform various manipulations. I implemented forward and reverse diffusion processes, learning how noise is progressively added and removed. I then explored techniques like Classifier-Free Guidance (CFG) to improve image quality and image-to-image translation to transform existing images. Finally, I built and trained my own diffusion model on the MNIST dataset, implementing both unconditional and conditional generation, and even created a class-conditional diffusion model capable of generating specific digits on demand. Through this project, I gained deep insights into how modern generative AI systems work and the mathematics underlying diffusion processes.
+    In this project, I explored diffusion models. I worked with pre-trained diffusion models to understand the denoising process and perform fun image generation experiments. I began by experimenting with DeepFloyd IF, a state-of-the-art text-to-image model, to generate images from text prompts and perform various manipulations. I implemented forward and reverse diffusion processes, learning how noise is progressively added and removed. I then explored techniques like Classifier-Free Guidance (CFG) to improve image quality and image-to-image translation to transform existing images. 
   </p>
 
   <h2>Part 0: Setup and Sampling from Pre-trained Models</h2>
   <h3>Part 0.1: Getting Started with DeepFloyd</h3>
   <p>
-    To begin, I set up the DeepFloyd IF model, a powerful text-to-image diffusion model. I loaded the pretrained Stage 1 model, which operates at 64×64 resolution and uses a UNet architecture to denoise images. I tested the model by generating images from three different text prompts: "an oil painting of a snowy mountain village", "a man wearing a hat", and "a rocket ship". For each prompt, I used 20 inference steps to progressively denoise from random noise to a coherent image. Below are the generated images:
+    To begin, I set up the DeepFloyd IF model, a powerful text-to-image diffusion model. I loaded the pretrained Stage 1 model, which operates at 64×64 resolution and uses a UNet architecture to denoise images. I tested the model by generating images from three different text prompts. For each prompt, I used 10 and 20 inference steps to progressively denoise from random noise to a coherent image. I used a seed of 100. Below are the generated images:
   </p>
 
   <div class="flex-center">
-    <figure class="source"><img src="part_0_1.png"><figcaption>Prompts and Generated Images</figcaption></figure>
+    <figure class="source"><img src="part_0_1_10.png"><figcaption>Prompts and Generated Images (Inference Steps = 10)</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
+    <figure class="source"><img src="part_0_1_20.png"><figcaption>Prompts and Generated Images (Inference Steps = 20)</figcaption></figure>
   </div>
 
   <h2>Part 1: Sampling Loops</h2>
@@ -114,7 +118,13 @@
 
   <div class="flex-center">
     <figure class="source"><img src="1_2_250.png"><figcaption>Gaussian Blur, t = 250</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
     <figure class="source"><img src="1_2_500.png"><figcaption>Gaussian Blur, t = 500</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
     <figure class="source"><img src="1_2_750.png"><figcaption>Gaussian Blur, t = 750</figcaption></figure>
   </div>
 
@@ -125,7 +135,13 @@
 
   <div class="flex-center">
     <figure class="source"><img src="1_3_250.png"><figcaption>One-Step Denoise, t = 250</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
     <figure class="source"><img src="1_3_500.png"><figcaption>One-Step Denoise, t = 500</figcaption></figure>
+  </div>
+
+  <div class="flex-center">
     <figure class="source"><img src="1_3_750.png"><figcaption>One-Step Denoise, t = 750</figcaption></figure>
   </div>
 
@@ -199,6 +215,7 @@
     <figure class="source"><img src="1_7_4_sea_lion.png"><figcaption>i_start = 7</figcaption></figure>
     <figure class="source"><img src="1_7_5_sea_lion.png"><figcaption>i_start = 10</figcaption></figure>
     <figure class="source"><img src="1_7_6_sea_lion.png"><figcaption>i_start = 20</figcaption></figure>
+    <figure class="source"><img src="sea_lion.png"><figcaption>Sea Lion Original</figcaption></figure>
   </div>
 
   <h4 style="text-align: center; font-weight: bold;">Flower</h4>
@@ -209,6 +226,7 @@
     <figure class="source"><img src="1_7_4_flower.png"><figcaption>i_start = 7</figcaption></figure>
     <figure class="source"><img src="1_7_5_flower.png"><figcaption>i_start = 10</figcaption></figure>
     <figure class="source"><img src="1_7_6_flower.png"><figcaption>i_start = 20</figcaption></figure>
+    <figure class="source"><img src="flower.jpg"><figcaption>Flower Original</figcaption></figure>
   </div>
 
   <h3>Part 1.7.1: Editing Hand-Drawn and Web Images</h3>
@@ -217,63 +235,27 @@
   </p>
 
   <div class="flex-center">
-    <figure class="source"><img src="1_7_avocado.png"><figcaption>Avocado</figcaption></figure>
-  </div>
+    <figure class="source"><img src="1_7_avocado.png"><figcaption>Avocado Generation</figcaption></figure>
+    <figure class="source"><img src="1_7_avocado.png"><figcaption>Avocado Original</figcaption></figure>
 
-  <h3>Part 1.7.2: Inpainting</h3>
-  <p>
-    I implemented inpainting by creating a binary mask indicating which regions to regenerate. During the denoising loop, I replace the masked region with the model's prediction while keeping the unmasked region from the original (noisy) image. This allows selective editing of images while preserving the rest of the content.
-  </p>
-
-  <div class="flex-center">
-    <figure class="source"><img src="placeholder_inp_orig.png"><figcaption>Original Image</figcaption></figure>
-    <figure class="source"><img src="placeholder_inp_mask.png"><figcaption>Mask</figcaption></figure>
-    <figure class="source"><img src="placeholder_inp_result.png"><figcaption>Inpainted Result</figcaption></figure>
   </div>
 
   <h3>Part 1.7.3: Text-Conditional Image-to-Image Translation</h3>
   <p>
-    I experimented with creative text prompts to transform images in interesting ways. By carefully crafting prompts and tuning the noise level, I could achieve various artistic effects while maintaining recognizable elements from the source image.
+    I experimented with creative text prompts to transform images in interesting ways. By carefully crafting prompts, I could achieve various artistic effects while maintaining recognizable elements from the source image.
   </p>
 
   <div class="flex-center">
     <figure class="source"><img src="1_7_rocket_campanile.png"><figcaption>Rocket Ship Generation w/Campanile Image</figcaption></figure>
   </div>
 
-  <h3>Part 1.8: Visual Anagrams</h3>
-  <p>
-    Visual anagrams are images that look like one thing when viewed normally but reveal a different image when flipped upside down. I implemented this by denoising with two different text prompts simultaneously: one for the normal orientation and one for the flipped orientation. At each denoising step, I estimate the noise for both prompts, flip the noise estimate for the second prompt, and average them together. This forces the model to find an image that satisfies both prompts at once. I experimented with several prompt pairs including "an oil painting of an old man" / "an oil painting of people around a campfire", "an oil painting of a snowy mountain village" / "a rocket ship", and my own creative prompt pair.
-  </p>
-
-  <h4 style="text-align: center; font-weight: bold;">Visual Anagram Examples</h4>
   <div class="flex-center">
-    <figure class="source"><img src="placeholder_anagram1_normal.png"><figcaption>Normal: "an old man"</figcaption></figure>
-    <figure class="source"><img src="placeholder_anagram1_flip.png"><figcaption>Flipped: "people around<br>a campfire"</figcaption></figure>
+    <figure class="source"><img src="1_7_sea_lion_retriever.png"><figcaption>Retriever Generation w/Sea Lion Image</figcaption></figure>
   </div>
 
   <div class="flex-center">
-    <figure class="source"><img src="placeholder_anagram2_normal.png"><figcaption>Normal: "a snowy<br>mountain village"</figcaption></figure>
-    <figure class="source"><img src="placeholder_anagram2_flip.png"><figcaption>Flipped: "a rocket ship"</figcaption></figure>
+    <figure class="source"><img src="1_7_candle_pencil.png"><figcaption>Pencil Generation w/Candle Image</figcaption></figure>
   </div>
-
-  <div class="flex-center">
-    <figure class="source"><img src="placeholder_anagram3_normal.png"><figcaption>Normal: "Your Prompt 1"</figcaption></figure>
-    <figure class="source"><img src="placeholder_anagram3_flip.png"><figcaption>Flipped: "Your Prompt 2"</figcaption></figure>
-  </div>
-
-  <h3>Part 1.9: Hybrid Images</h3>
-  <p>
-    Hybrid images are optical illusions that appear as one image when viewed up close but reveal a different image when viewed from far away. This works by combining the high-frequency components of one image with the low-frequency components of another. I implemented this by denoising with two different prompts simultaneously, applying a low-pass filter to the noise estimate from the first prompt and a high-pass filter to the noise estimate from the second prompt, then combining them. The result is an image that looks like the high-frequency prompt when viewed closely and transitions to the low-frequency prompt when viewed from a distance. I tested this with prompt pairs including "a skull" / "a man wearing a hat", "a lithograph of waterfalls" / "a lithograph of a skull", and my own creative combination.
-  </p>
-
-  <h4 style="text-align: center; font-weight: bold;">Hybrid Image Examples</h4>
-  <div class="flex-center">
-    <figure class="source"><img src="placeholder_hybrid1.png"><figcaption>Hybrid: "a skull" (low-freq)<br>+ "a man wearing a hat" (high-freq)</figcaption></figure>
-    <figure class="source"><img src="placeholder_hybrid2.png"><figcaption>Hybrid: "waterfalls" (low-freq)<br>+ "a skull" (high-freq)</figcaption></figure>
-    <figure class="source"><img src="placeholder_hybrid3.png"><figcaption>Hybrid: Your own<br>creative combination</figcaption></figure>
-  </div>
-
-  
   
 </body>
 </html>
